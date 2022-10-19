@@ -79,7 +79,7 @@ class ProductPurchaseController extends Controller
         ]);
         $temp_items = TempItemStore::where('serial_id', $request->serial_no)->get();
         if($temp_items->isEmpty()){
-            return redirect()->route('item-purchase.create')->with('error', 'At lest One project select');
+            return redirect()->route('item-purchase.create')->with('error', 'At lest One Item select');
         }
         $item_lists = new ProductPurchase;
         $item_lists->po_list = $request->po_list;

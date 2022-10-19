@@ -75,6 +75,20 @@
                                                     <div class="form-body">
                                                         <div class="row">
                                                             <div class="col-md-4">
+                                                                <label>Account Title</label>
+                                                            </div>
+                                                            <div class="col-md-8 form-group">
+                                                                    <input type="text" id="signatory" class="form-control"
+                                                                        name="signatory"
+                                                                        value="{{ isset($bank) ? $bank->signatory : '' }}"
+                                                                        placeholder="Account Title" required>
+
+                                                                        @error('signatory')
+
+                                                                        <div class="btn btn-sm btn-danger">{{ $message }}</div>
+                                                                    @enderror
+                                                            </div>
+                                                            <div class="col-md-4">
                                                                 <label>Account Number</label>
                                                             </div>
                                                             <div class="col-md-8 form-group ">
@@ -87,19 +101,16 @@
                                                                     @enderror
                                                             </div>
                                                             <div class="col-md-4">
-                                                                <label>Authorized Signatory</label>
+                                                                <label>IBAN</label>
                                                             </div>
-                                                            <div class="col-md-8 form-group">
-                                                                    <input type="text" id="signatory" class="form-control"
-                                                                        name="signatory"
-                                                                        value="{{ isset($bank) ? $bank->signatory : '' }}"
-                                                                        placeholder="Authorized Signatory" required>
+                                                            <div class="col-md-8 form-group ">
+                                                                    <input type="text" id="" class="form-control"
+                                                                        name="" value=""
+                                                                        placeholder="IBAN" >
 
-                                                                        @error('signatory')
-
-                                                                        <div class="btn btn-sm btn-danger">{{ $message }}</div>
-                                                                    @enderror
                                                             </div>
+
+
                                                             <div class="col-12 d-flex justify-content-end ">
                                                                 <button class="btn btn-info bank-form-btn mr-1"
                                                                 data_target="{{ route('bankForm') }}">New</button>
@@ -128,18 +139,19 @@
                             </div>
                             <div class="col-md-6 text-right">
                                 <a href="{{ route('pdf',$id="bankDetails") }}" class="btn btn-xs btn-info float-right" target="_blank">Print</a>
-                                <button class="btn btn-xs btn-info float-right"
+                                <button class="btn btn-xs btn-info float-right mr-1"
                             onclick="exportTableToCSV('bankdetails.csv')">Export To CSV</button>
                             </div>
                             <div class="table-responsive">
-                                <table class="table">
+                                <table class="table table-sm table-bordered">
                                     <thead class="thead-light">
                                         <tr>
                                             <th>Bank Code</th>
                                             <th>Bank Name</th>
                                             <th>Bank Branch</th>
+                                            <th>Account Title</th>
                                             <th>Account Number</th>
-                                            <th>Authorized Signatory</th>
+
                                             <th>Action</th>
                                         </tr>
                                     </thead>

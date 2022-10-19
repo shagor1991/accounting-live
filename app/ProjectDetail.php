@@ -42,7 +42,7 @@ class ProjectDetail extends Model
 
     public function invoicess()
     {
-        return $this->hasMany(Invoice::class, 'branch');
+        return $this->hasMany(Invoice::class, 'project_id');
     }
 
 

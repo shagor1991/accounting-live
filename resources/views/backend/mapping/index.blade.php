@@ -1,5 +1,5 @@
 @extends('layouts.backend.app')
-
+@section('title', 'mapping')
 @section('content')
     <!-- BEGIN: Content-->
     <div class="app-content content">
@@ -9,16 +9,16 @@
                 <div class="row" id="table-bordered">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Mapping</h4>
+                            <div class="content-title">
+                                <h4 >Mapping</h4>
                                 {{-- <a href="" class="btn btn-primary">Add New</a> --}}
                             </div>
-                            <div class="card-body">
+                            <div class="card-body content-padding">
                                 <!-- table bordered -->
                                 <form action="{{route('mapping.store')}}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
-                                        <div class="col-sm-6 col-12 mb-1">
+                                        <div class="col-sm-6 col-12">
                                             <label for="txn">TXN TYPE</label>
                                             <select name="fld_txn_type" id="txn" class="form-control" required>
                                                 <option value=""></option>
@@ -27,7 +27,7 @@
                                                 <option value="vat">VAT</option>
                                             </select>
                                         </div>
-                                        <div class="col-sm-6 col-12 mb-1">
+                                        <div class="col-sm-6 col-12">
                                             <label for="mode">MODE</label>
                                             <select name="fld_txn_mode" id="mode" class="form-control">
                                                 <option value=""></option>
@@ -36,11 +36,11 @@
                                                 <option value="vat">VAT</option>
                                             </select>
                                         </div>
-                                        <div class="col-sm-6 col-12 mb-1">
+                                        <div class="col-sm-6 col-12">
                                             <label for="mode">A/C CODE</label>
                                             <input type="text" class="form-control" name="fld_ac_code" id="fld_ac_code">
                                         </div>
-                                        <div class="col-sm-6 col-12 mb-1">
+                                        <div class="col-sm-6 col-12">
                                             <label for="mode">Account Head</label>
                                             <select name="fld_ac_name" id="fld_ac_name" class="form-control">
                                                 <option value=""></option>
@@ -49,7 +49,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-12 d-flex justify-content-end mb-1">
+                                        <div class="col-12 d-flex justify-content-end mt-1">
                                             <button type="submit" class="btn btn-primary">Submit</button>
                                             <button type="reset" class="btn" id="reset">Reset</button>
                                         </div>
@@ -58,8 +58,8 @@
                             </div>
                         </div>
                         <div class="table-responsive card">
-                            <table class="table table-bordered mb-0">
-                                <thead>
+                            <table class="table table-sm table-bordered">
+                                <thead class="user-table-body">
                                     <tr>
                                         <th>TXN Type</th>
                                         <th>MODE</th>
@@ -70,7 +70,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($mapping as $item)
-                                        <tr style="line-height: 0px;">
+                                        <tr  class="data-row">
                                             <td>{{$item->fld_txn_type}}</td>
                                             <td>{{$item->fld_txn_mode}}</td>
                                             <td>{{$item->fld_ac_code}}</td>

@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'role_id',
     ];
 
     /**
@@ -46,5 +46,10 @@ class User extends Authenticatable
     public function hasPermission($permission): bool
     {
         return $this->role->permissions()->where('slug', $permission)->first() ? true : false;
+    }
+
+    public function hasPermissionAny($permissions): bool
+    {
+        return $this->role->permissions()->whereIn('slug', $permissions)->count() ? true : false;
     }
 }

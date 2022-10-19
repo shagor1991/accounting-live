@@ -53,6 +53,15 @@ class UserSeeder extends Seeder
             'password' => Hash::make('123456789'),
             'status' => true
         ]);
+        // Create user
+        $role1 = Role::where('slug','finance-head')->first();
+        User::updateOrCreate([
+            'role_id' => $role1->id,
+            'name' => 'Mominul',
+            'email' => 'mominul@gmail.com',
+            'password' => Hash::make('123456789'),
+            'status' => true
+        ]);
 
 
     }

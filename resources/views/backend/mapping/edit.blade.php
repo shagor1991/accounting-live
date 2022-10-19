@@ -1,5 +1,5 @@
 @extends('layouts.backend.app')
-
+@section('title', 'mapping edit')
 @section('content')
     <!-- BEGIN: Content-->
     <div class="app-content content">
@@ -57,8 +57,8 @@
                                     </div>
                                 </form>
                                 <div class="table-responsive">
-                                    <table class="table table-bordered mb-0">
-                                        <thead>
+                                    <table class="table table-sm table-bordered">
+                                        <thead class="user-table-body">
                                             <tr>
                                                 <th>TXN Type</th>
                                                 <th>MODE</th>
@@ -69,7 +69,7 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($mapping as $item)
-                                                <tr style="line-height: 0px;">
+                                                <tr  class="data-row">
                                                     <td>{{$item->fld_txn_type}}</td>
                                                     <td>{{$item->fld_txn_mode}}</td>
                                                     <td>{{$item->fld_ac_code}}</td>

@@ -39,12 +39,12 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'item_type' => 'required',
-            'item_type_no' => 'required',
+            'group_name' => 'required',
+            'group_no' => 'required',
         ]);
         Group::create([
-            'item_type' => $request->item_type,
-            'item_type_no' => $request->item_type_no,
+            'group_name' => $request->group_name,
+            'group_no' => $request->group_no,
         ]);
         $notification= array(
             'message'       => 'Group Added successfully!',
@@ -87,12 +87,12 @@ class GroupController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'item_type' => 'required',
-            'item_type_no' => 'required',
+            'group_name' => 'required',
+            'group_no' => 'required',
         ]);
         Group::find($id)->update([
-            'item_type' => $request->item_type,
-            'item_type_no' => $request->item_type_no,
+            'group_name' => $request->group_name,
+            'group_no' => $request->group_no,
         ]);
         $notification= array(
             'message'       => 'Group Updated successfully!',
@@ -109,11 +109,11 @@ class GroupController extends Controller
      */
     public function destroy($id)
     {
-        $search = ItemList::where('groups_item_type_no', $id)->count();
+        $group = Group::find($id);
+        $search = ItemList::where('group_no', $group->group_no)->count();
         if ($search > 0) {
             return back()->with('error', "It has Related with Item Table");
         }
-        $group = Group::find($id);
         $group->delete();
         $notification = array(
             'message'       => 'Group Deleted successfully!',
@@ -123,7 +123,7 @@ class GroupController extends Controller
     }
 
     public function search_group(Request $request){
-        $groups = Group::where('item_type_no', 'like', "%{$request->p}%")->orWhere('item_type', 'like', "%{$request->p}%")->get();
+        $groups = Group::where('group_no', 'like', "%{$request->p}%")->orWhere('group_name', 'like', "%{$request->p}%")->get();
         return Response()->json($groups);
     }
 }

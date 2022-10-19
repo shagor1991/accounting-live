@@ -68,7 +68,7 @@
                                         <div class="form-body">
 
                                             <div class="row">
-                                                <div class="col-md-6 col-12">
+                                                <div class="col-md-3 col-12">
                                                     <div class="form-group">
                                                         <label for="config-name">Config Name</label>
                                                         <input type="text" id="config-name" class="form-control @error('config_name') error @enderror" name="config_name" value="{{ isset($edit_setting) ? $edit_setting->config_name : old('config_name')}}" placeholder="Config Name" required>
@@ -78,14 +78,46 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6 col-12">
+                                                <div class="col-md-4 col-12">
                                                     <div class="form-group">
+                                                        <label for="config-value">Value Type</label>
+                                                        <ul class="list-unstyled mb-0">
+                                                            <li class="d-inline-block mr-2 mb-1">
+                                                                <fieldset>
+                                                                    <div class="radio">
+                                                                        <input type="radio" name="config_type" class="config_type" id="radio1" value="text" 
+                                                                        {{ isset($edit_setting) ? ($edit_setting->config_type=='text' ? 'checked': '' ) : 'checked' }}
+                                                                        >
+                                                                        <label for="radio1">Text/Number</label>
+                                                                    </div>
+                                                                </fieldset>
+                                                            </li>
+                                                            <li class="d-inline-block mr-2 mb-1">
+                                                                <fieldset>
+                                                                    <div class="radio">
+                                                                        <input type="radio" name="config_type" class="config_type" id="radio2" value="img"
+                                                                        {{ (isset($edit_setting) && $edit_setting->config_type=='img' )? 'checked': '' }}
+                                                                        >
+                                                                        <label for="radio2">Image</label>
+                                                                    </div>
+                                                                </fieldset>
+                                                            </li>
+                                                            
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-5 col-12">
+                                                    <div class="form-group conf-val-text">
                                                         <label for="config-value">Config Value</label>
-                                                        <input type="text" id="config-value" class="form-control @error('config_value') error @enderror" name="config_value" value="{{ isset($edit_setting) ? $edit_setting->cconfig_value : old('config_value')}}" placeholder="Config Value" required>
+                                                        <input type="text" id="config-value-text"  class="form-control @error('config_value') error @enderror" name="config_value" value="{{ isset($edit_setting) ? $edit_setting->config_value : old('config_value')}}" placeholder="Config Value" style="display: {{ (isset($edit_setting) && $edit_setting->config_type =='img') ? 'none': 'block' }}">
+                                                        
+                                                        <input type="file" id="config-value-img" class="form-control @error('config_value') error @enderror" name="config_value" style="display:{{ isset($edit_setting) ? ($edit_setting->config_type =='img' ? 'block' : 'none') : 'none' }};">
                                                         @error('config_value')
                                                         <span class="error">{{ $message }}</span>
                                                         @enderror
                                                     </div>
+                                                    
                                                 </div>
 
                                             </div>
@@ -123,7 +155,17 @@
     {{-- <script src="{{ asset('assets/backend/app-assets/vendors/js/jquery/jquery.min.js') }}"></script> --}}
     <script>
         $(document).ready(function() {
-            // Page Script
+            
+            $('.config_type').click(function(){
+                var conf_type= $(this).val();
+                if(conf_type == 'img'){
+                    $('#config-value-img').show();
+                    $('#config-value-text').val('').hide();
+                }else{
+                    $('#config-value-text').show();
+                    $('#config-value-img').val('').hide();
+                }
+            });
            
 
         });

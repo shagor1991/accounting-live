@@ -43,7 +43,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                <h4>Journal</h4>
+                                <h4>Journal for {{ $type }}</h4>
                                 <hr>
                             </div>
 
@@ -67,26 +67,13 @@
                                 To CSV</button>
                         </div>
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-sm table-bordered">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th>Project</th>
-                                        <th>Owner</th>
-                                        <th>Location</th>
-                                        <th>Mobile</th>
-                                        <th>Journal No</th>
                                         <th>Date</th>
-                                        <th>Invoice No</th>
-                                        <th>Cost Center</th>
-                                        <th>Party Info</th>
-                                        <th>TXN Type</th>
-                                        <th>Pay Mode</th>
-                                        <th>Account Head</th>
-                                        <th>Amount</th>
-                                        <th>Tax Rate</th>
-                                        <th>Vat Amount</th>
-                                        <th>Total Amount</th>
+                                        <th>Journal No</th>
                                         <th>Narration</th>
+                                        <th>Amount</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -94,31 +81,17 @@
                                 <tbody class="user-table-body">
                                     @foreach ($journals as $journal)
                                         <tr>
-                                            <td>{{ $journal->project->proj_name }}</td>
-                                            <td>{{ $journal->project->owner_name }}</td>
-                                            <td>{{ $journal->project->address }}</td>
-                                            <td>{{ $journal->project->cont_no }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($journal->created_at)->format('d.m.Y')}} </td>
                                             <td>{{ $journal->journal_no }}</td>
-                                            <td>{{ $journal->date }}</td>
-                                            <td>{{ $journal->invoice_no }}</td>
-                                            <td>{{ $journal->costCenter->cc_name }}</td>
-                                            <td>{{ $journal->PartyInfo->pi_name }}</td>
-                                            <td>{{ $journal->txn_type }}</td>
-                                            <td>{{ $journal->txn_mode }}</td>
-                                            <td>{{ $journal->accHead->fld_ac_code }},
-                                                {{ $journal->accHead->fld_ac_head }}</td>
-                                            <td>{{ $journal->amount }}</td>
-                                            <td>{{ $journal->taxRate->name }}</td>
-                                            <td>{{ $journal->vat_amount }}</td>
-                                            <td>{{ $journal->total_amount }}</td>
                                             <td>{{ $journal->narration }}</td>
+                                            <td>{{ $journal->amount }}</td>
                                             <td style="white-space: nowrap">
                                                 <a href="{{ route('journalView', $journal) }}"
                                                     class="btn btn-sm btn-warning" target="_blank"><i class="bx bx-hide"></i></a>
-                                                <a href="{{ route('journalDelete', $journal) }}"
+                                                {{-- <a href="{{ route('journalDelete', $journal) }}"
                                                     onclick="return confirm('about to delete journal. Please, Confirm?')"
                                                     class="btn btn-sm btn-danger"><i class="bx bx-trash"
-                                                        aria-hidden="true"></i></a>
+                                                        aria-hidden="true"></i></a> --}}
 
                                             </td>
                                         </tr>
@@ -133,7 +106,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12 text-right">
-                            {{ $journals->links() }}
+                            {{-- {{ $journals->links() }} --}}
                         </div>
                     </div>
                 </section>

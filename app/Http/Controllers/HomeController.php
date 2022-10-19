@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\Invoice;
 use App\ItemList;
 use App\Models\BankDetail;
 use App\Models\CostCenter;
@@ -11,6 +12,7 @@ use App\PartyInfo;
 use App\ProfitCenter;
 use App\ProjectDetail;
 use App\Setting;
+use App\Style;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -32,9 +34,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $settings= Setting::where('config_name', 'company_name')->first();
-        // return $settings;
+        // $counter_sales= Invoice::where('')
         return view('home');
+    }
+
+    public function under_construction(){
+        return view('under-construction');
     }
 
 
@@ -67,7 +72,7 @@ class HomeController extends Controller
         }
 
         if ($id == "partyCenter") {
-            $partyInfos = PartyInfo::latest()->get();
+            $partyInfos = PartyInfo::orderBy('id','DESC')->get();
             return view('backend/pdf/partyInfoPdf', compact('partyInfos'));
         }
     }
@@ -149,8 +154,8 @@ class HomeController extends Controller
 
 
         if ($id == "partyCenter") {
-            $partyInfos = PartyInfo::where('cc_code', 'like', "%{$request->q}%")
-                ->orWhere('cc_name', 'like', "%{$request->q}%")
+            $partyInfos = PartyInfo::where('pi_code', 'like', "%{$request->q}%")
+                ->orWhere('pi_name', 'like', "%{$request->q}%")
                 ->orWhere('trn_no', 'like', "%{$request->q}%")
                 ->latest()
                 ->take(40)
@@ -162,23 +167,30 @@ class HomeController extends Controller
         }
         // work by mominul
         if ($id == "group") {
-            $groups = Group::where('item_type_no', 'like', "%{$request->q}%")->orWhere('item_type', 'like', "%{$request->q}%")->get();
+            $groups = Group::where('group_no', 'like', "%{$request->q}%")->orWhere('group_name', 'like', "%{$request->q}%")->get();
             $i = 1;
             if ($request->ajax()) {
                 return Response()->json(['page' => view('backend.ajax.group', ['groups' => $groups, 'i' => $i])->render()]);
             }
         }
+        if ($id == "style") {
+            $styles = Style::where('style_no', 'like', "%{$request->q}%")->orWhere('style_name', 'like', "%{$request->q}%")->get();
+            $i = 1;
+            if ($request->ajax()) {
+                return Response()->json(['page' => view('backend.ajax.style', ['styles' => $styles, 'i' => $i])->render()]);
+            }
+        }
 
         if ($id == "iteList") {
-            $itme_lists = ItemList::where('barcode', 'like', "%{$request->q}%")
+            $itme_lists = ItemList::orderBy('barcode', 'asc')
+                ->where('barcode', 'like', "%{$request->q}%")
                 ->orWhere('item_name', 'like', "%{$request->q}%")
                 ->orWhere('unit', 'like', "%{$request->q}%")
                 ->orWhere('sell_price', 'like', "%{$request->q}%")
-                ->orWhere('vat_rate', 'like', "%{$request->q}%")
+                ->orWhere('vat_amount', 'like', "%{$request->q}%")
                 ->latest()
                 ->get();
             $i = 1;
-
             if ($request->ajax()) {
                 return Response()->json(['page' => view('backend.ajax.itemList', ['itme_lists' => $itme_lists, 'i' => $i])->render()]);
             }

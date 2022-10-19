@@ -25,7 +25,7 @@
                                 <div class="card-body">
                                     <div class="cost-center-form">
                                         @isset($costCenter)
-                                            <form action="{{ route('costCentersUpdate', $costCenter) }}" method="POST">
+                                        <form action="{{ route('costCentersUpdate', $costCenter) }}" method="POST">
                                             @else
                                                 <form action="{{ route('costCenterPost') }}" method="POST">
                                                 @endisset
@@ -38,30 +38,27 @@
 
                                                         <div class="form-body">
                                                             <div class="row">
+
                                                                 <div class="col-md-4">
                                                                     <label>Code</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
-                                                                    <input type="text" id="" class="form-control" name=""
-                                                                        value="{{ isset($cc) ? $cc : '' }}"
+                                                                    <input type="text" id="" class="form-control" name="" value="{{ isset($cc) ? $cc : '' }}"
                                                                         placeholder="Cost Center Code" disabled readonly>
 
                                                                 </div>
-
 
                                                                 <div class="col-md-4">
                                                                     <label>Cost Center Name</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
-                                                                    <input type="text" id="cc_name" class="form-control"
-                                                                        name="cc_name"
+                                                                    <input type="text" id="cc_name" class="form-control" name="cc_name"
                                                                         value="{{ isset($costCenter) ? $costCenter->cc_name : '' }}"
-                                                                        placeholder="Cost Center Name" disabled readonly>
+                                                                        placeholder="Cost Center Name" required>
 
 
                                                                     @error('cc_name')
-                                                                        <div class="btn btn-sm btn-danger">{{ $message }}
-                                                                        </div>
+                                                                        <div class="btn btn-sm btn-danger">{{ $message }}</div>
                                                                     @enderror
                                                                 </div>
 
@@ -69,15 +66,13 @@
                                                                     <label>Activities</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
-                                                                    <input type="text" id="activity" class="form-control"
-                                                                        name="activity"
-                                                                        value="{{ isset($costCenter) ? $costCenter->activity : '' }}"
-                                                                        placeholder="Activity" disabled readonly>
+                                                                    <input type="text" id="activity" class="form-control" name="activity"
+                                                                        value="{{ isset($costCenter) ? $costCenter->activity : '' }}" placeholder="Activity"
+                                                                        required>
 
 
                                                                     @error('activity')
-                                                                        <div class="btn btn-sm btn-danger">{{ $message }}
-                                                                        </div>
+                                                                        <div class="btn btn-sm btn-danger">{{ $message }}</div>
                                                                     @enderror
                                                                 </div>
 
@@ -94,23 +89,21 @@
                                                                     <label>Person responsible</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
-                                                                    <input type="text" id="prsn_responsible"
-                                                                        class="form-control" name="prsn_responsible"
+                                                                    <input type="text" id="prsn_responsible" class="form-control" name="prsn_responsible"
                                                                         value="{{ isset($costCenter) ? $costCenter->prsn_responsible : '' }}"
-                                                                        placeholder="Contact Person" disabled readonly>
+                                                                        placeholder="Person responsible" required>
 
 
                                                                     @error('prsn_responsible')
-                                                                        <div class="btn btn-sm btn-danger">{{ $message }}
-                                                                        </div>
+                                                                        <div class="btn btn-sm btn-danger">{{ $message }}</div>
                                                                     @enderror
                                                                 </div>
 
                                                                 <div class="col-md-4">
-                                                                    <label>Project</label>
+                                                                    <label>Branch Name</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
-                                                                    <select name="project_id" class="form-control" id="" required readonly disabled>
+                                                                    <select name="project_id" class="common-select2" style="width: 100% !important" id="" required >
                                                                         <option value="">Select...</option>
                                                                         @foreach ($projects as $item)
                                                                          <option value="{{ $item->id }}">{{ $item->proj_name }}</option>
@@ -123,13 +116,10 @@
                                                                     @enderror
                                                                 </div>
                                                                 <div class="col-12 d-flex justify-content-end ">
-                                                                    <button class="btn btn-info cost-center-form-btn mr-1"
-                                                                    data_target="{{ route('costCenterForm') }}">New</button>
-                                                                    <button type="submit" class="btn btn-primary mr-1"
-                                                                        disabled>Submit</button>
-                                                                    <button type="reset"
-                                                                        class="btn btn-light-secondary"
-                                                                        disabled>Reset</button>
+                                                                    <button class="btn btn-info profit-center-form-btn mr-1"
+                                                                    data_target="{{ route('profitCenterForm') }}" disabled>New</button>
+                                                                    <button type="submit" class="btn btn-primary mr-1">Submit</button>
+                                                                    <button type="reset" class="btn btn-light-secondary">Reset</button>
 
                                                                 </div>
                                                             </div>
@@ -137,6 +127,7 @@
                                                     </div>
                                                 </div>
                                             </form>
+
                                     </div>
                                 </div>
                             </div>
@@ -154,18 +145,18 @@
                         <div class="col-md-6 text-right">
                             <a href="{{ route('pdf', $id = 'costCenter') }}" class="btn btn-xs btn-info float-right"
                                 target="_blank">Print</a>
-                            <button class="btn btn-xs btn-info float-right"
+                            <button class="btn btn-xs btn-info float-right mr-1"
                                 onclick="exportTableToCSV('costcenterdetails.csv')">Export To CSV</button>
                         </div>
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-sm table-bordered">
                                 <thead class="thead-light">
                                     <tr>
                                         <th>Cost Center Code</th>
                                         <th>Cost Center Name</th>
                                         <th>Activity</th>
                                         <th>Person Resposible</th>
-                                        <th>Project</th>
+                                        <th>Branch Name</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -177,7 +168,7 @@
                                             <td>{{ $cCenter->cc_name }}</td>
                                             <td>{{ $cCenter->activity }}</td>
                                             <td>{{ $cCenter->prsn_responsible }}</td>
-                                            <td>{{ $cCenter->project->proj_name }}</td>
+                                            <td>{{ isset($cCenter->project)? $cCenter->project->proj_name :"" }}</td>
 
 
                                             <td style="white-space: nowrap">

@@ -48,7 +48,15 @@
                                             <tr>
                                             <td>{{ $setting->id }} </td>
                                             <td>{{ $setting->config_name }} </td>
-                                            <td>{{ $setting->config_value }} </td>
+                                            <td>
+                                                @if ($setting->config_type=='img')
+                                                    <img src="{{ asset('storage/upload/settings/'.$setting->config_value)}}" alt="" width="80">
+                                                @else
+                                                    {{ $setting->config_value }} 
+                                                @endif
+                                                
+                                            
+                                            </td>
                                             
                                             <td>
                                                 <a href="{{route('settings.edit', $setting->id)}}" class="btn btn-icon btn-success"><i class="bx bx-edit"></i></a>

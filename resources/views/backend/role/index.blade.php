@@ -1,5 +1,7 @@
 @extends('layouts.backend.app')
 
+@section('title', 'Role Management')
+
 @section('content')
     <!-- BEGIN: Content-->
     <div class="app-content content">

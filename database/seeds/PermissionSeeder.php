@@ -22,50 +22,24 @@ class PermissionSeeder extends Seeder
         ]);
 
         // Role management
-        $moduleAppRole = Module::updateOrCreate(['name' => 'Role Management']);
+        $moduleAppAccess = Module::updateOrCreate(['name' => 'Access Control']);
         Permission::updateOrCreate([
-            'module_id' => $moduleAppRole->id,
-            'name' => 'Access Roles',
-            'slug' => 'app.roles.index',
+            'module_id' => $moduleAppAccess->id,
+            'name' => 'User Management',
+            'slug' => 'app.access_control.user',
         ]);
         Permission::updateOrCreate([
-            'module_id' => $moduleAppRole->id,
-            'name' => 'Create Role',
-            'slug' => 'app.roles.create',
+            'module_id' => $moduleAppAccess->id,
+            'name' => 'Role Management',
+            'slug' => 'app.access_control.role',
         ]);
         Permission::updateOrCreate([
-            'module_id' => $moduleAppRole->id,
-            'name' => 'Edit Role',
-            'slug' => 'app.roles.edit',
-        ]);
-        Permission::updateOrCreate([
-            'module_id' => $moduleAppRole->id,
-            'name' => 'Delete Role',
-            'slug' => 'app.roles.destroy',
+            'module_id' => $moduleAppAccess->id,
+            'name' => 'Settings',
+            'slug' => 'app.access_control.settings',
         ]);
 
-        // User management
-        $moduleAppUser = Module::updateOrCreate(['name' => 'User Management']);
-        Permission::updateOrCreate([
-            'module_id' => $moduleAppUser->id,
-            'name' => 'Access Users',
-            'slug' => 'app.users.index',
-        ]);
-        Permission::updateOrCreate([
-            'module_id' => $moduleAppUser->id,
-            'name' => 'Create User',
-            'slug' => 'app.users.create',
-        ]);
-        Permission::updateOrCreate([
-            'module_id' => $moduleAppUser->id,
-            'name' => 'Edit User',
-            'slug' => 'app.users.edit',
-        ]);
-        Permission::updateOrCreate([
-            'module_id' => $moduleAppUser->id,
-            'name' => 'Delete User',
-            'slug' => 'app.users.destroy',
-        ]);
+        
 
         // Mapping
         $mapping = Module::updateOrCreate(['name' => 'Mapping']);
@@ -251,6 +225,14 @@ class PermissionSeeder extends Seeder
             'slug' => 'app.party_info.destroy',
         ]);
 
+       // Journal
+       $document = Module::updateOrCreate(['name' => 'Document']);
+       Permission::updateOrCreate([
+           'module_id' => $document->id,
+           'name' => 'Document',
+           'slug' => 'app.document',
+       ]);
+
         // Journal
         $journal = Module::updateOrCreate(['name' => 'Journal']);
         Permission::updateOrCreate([
@@ -268,7 +250,276 @@ class PermissionSeeder extends Seeder
             'name' => 'Journal approval',
             'slug' => 'app.journal_approval',
         ]);
+
+        // Accounts Report
+        $accounts_report = Module::updateOrCreate(['name' => 'Accounts Report']);
+        Permission::updateOrCreate([
+            'module_id' => $accounts_report->id,
+            'name' => 'General Ledger',
+            'slug' => 'app.acreport.gl',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $accounts_report->id,
+            'name' => 'Trial Balance',
+            'slug' => 'app.acreport.tb',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $accounts_report->id,
+            'name' => 'Income Statement',
+            'slug' => 'app.acreport.is',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $accounts_report->id,
+            'name' => 'Balance Sheet',
+            'slug' => 'app.acreport.bs',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $accounts_report->id,
+            'name' => 'Cash Flow Statement',
+            'slug' => 'app.acreport.cfs',
+        ]);
+
+        // Style
+        $style = Module::updateOrCreate(['name' => 'Style']);
+        Permission::updateOrCreate([
+            'module_id' => $style->id,
+            'name' => 'Access style',
+            'slug' => 'app.style.index',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $style->id,
+            'name' => 'Create style',
+            'slug' => 'app.style.create',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $style->id,
+            'name' => 'Edit style',
+            'slug' => 'app.style.edit',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $style->id,
+            'name' => 'Delete style',
+            'slug' => 'app.style.destroy',
+        ]);
+
+        // Color
+        $color = Module::updateOrCreate(['name' => 'Color']);
+        Permission::updateOrCreate([
+            'module_id' => $color->id,
+            'name' => 'Access color',
+            'slug' => 'app.color.index',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $color->id,
+            'name' => 'Create color',
+            'slug' => 'app.color.create',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $color->id,
+            'name' => 'Edit color',
+            'slug' => 'app.color.edit',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $color->id,
+            'name' => 'Delete color',
+            'slug' => 'app.color.destroy',
+        ]);
+
+        // Size
+        $size = Module::updateOrCreate(['name' => 'Size']);
+        Permission::updateOrCreate([
+            'module_id' => $size->id,
+            'name' => 'Access size',
+            'slug' => 'app.size.index',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $size->id,
+            'name' => 'Create size',
+            'slug' => 'app.size.create',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $size->id,
+            'name' => 'Edit size',
+            'slug' => 'app.size.edit',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $size->id,
+            'name' => 'Delete size',
+            'slug' => 'app.size.destroy',
+        ]);
+
+        // Item List
+        $item_list = Module::updateOrCreate(['name' => 'item-list']);
+        Permission::updateOrCreate([
+            'module_id' => $item_list->id,
+            'name' => 'Access item list',
+            'slug' => 'app.item_list.index',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $item_list->id,
+            'name' => 'Create item list',
+            'slug' => 'app.item_list.create',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $item_list->id,
+            'name' => 'Edit item list',
+            'slug' => 'app.item_list.edit',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $item_list->id,
+            'name' => 'Delete item list',
+            'slug' => 'app.item_list.destroy',
+        ]);
+
+        // Stock Management
+        $stock = Module::updateOrCreate(['name' => 'Stock Managment']);
+        Permission::updateOrCreate([
+            'module_id' => $stock->id,
+            'name' => 'Stock Position',
+            'slug' => 'app.stock.position',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $stock->id,
+            'name' => 'Reconciliation',
+            'slug' => 'app.stock.reconciliation',
+        ]);
+
         
+        // Report 
+        $report = Module::updateOrCreate(['name' => 'Report']);
+        Permission::updateOrCreate([
+            'module_id' => $report->id,
+            'name' => 'Daily Sales',
+            'slug' => 'app.daily_sales',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $report->id,
+            'name' => 'Monthly Sales',
+            'slug' => 'app.monthly_sales',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $report->id,
+            'name' => 'Delivery Summery',
+            'slug' => 'app.delivery_summery',
+        ]);
+        
+        // Purchase
+        $purchase = Module::updateOrCreate(['name' => 'Purchase']);
+        Permission::updateOrCreate([
+            'module_id' => $purchase->id,
+            'name' => 'Requisition Entry',
+            'slug' => 'app.requisition_entry',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $purchase->id,
+            'name' => 'Requisition Authorize',
+            'slug' => 'app.requisition_authorize',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $purchase->id,
+            'name' => 'Requisition approval',
+            'slug' => 'app.requisition_approval',
+        ]);
+
+        Permission::updateOrCreate([
+            'module_id' => $purchase->id,
+            'name' => 'Purchase Order',
+            'slug' => 'app.po',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $purchase->id,
+            'name' => 'PO Approval',
+            'slug' => 'app.po_approval',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $purchase->id,
+            'name' => 'Goods Receive',
+            'slug' => 'app.gr',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $purchase->id,
+            'name' => 'Invoice Posting',
+            'slug' => 'app.ip',
+        ]);
+
+
+        // purchase return
+        $p_return = Module::updateOrCreate(['name' => 'Purchase Return']);
+        Permission::updateOrCreate([
+            'module_id' => $p_return->id,
+            'name' => 'Purchase Return Entry',
+            'slug' => 'app.purchase_return_entry',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $p_return->id,
+            'name' => 'Purchase Return Authorize',
+            'slug' => 'app.purchase_return_authorize',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $p_return->id,
+            'name' => 'Purchase Return approval',
+            'slug' => 'app.purchase_return_approval',
+        ]);
+        
+        // Payment Voucher
+        $payment_voucher = Module::updateOrCreate(['name' => 'Payment Voucher']);
+        Permission::updateOrCreate([
+            'module_id' => $payment_voucher->id,
+            'name' => 'Payment Voucher Entry',
+            'slug' => 'app.payment_voucher_entry',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $payment_voucher->id,
+            'name' => 'Payment Voucher Authorize',
+            'slug' => 'app.payment_voucher_authorize',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $payment_voucher->id,
+            'name' => 'Payment Voucher Approval',
+            'slug' => 'app.payment_voucher_approval',
+        ]);
+
+
+        // Sales
+        $sales = Module::updateOrCreate(['name' => 'Sales']);
+        Permission::updateOrCreate([
+            'module_id' => $sales->id,
+            'name' => 'Counter tax invoice',
+            'slug' => 'app.sales.counter_tax_invoice',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $sales->id,
+            'name' => 'SO Receive',
+            'slug' => 'app.sales.so',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $sales->id,
+            'name' => 'Delivery Note',
+            'slug' => 'app.sales.delivery_note',
+        ]);
+        Permission::updateOrCreate([
+            'module_id' => $sales->id,
+            'name' => 'Warehouse Tax Invoice',
+            'slug' => 'app.sales.warehouse_tax_invoice',
+        ]);
+
+        Permission::updateOrCreate([
+            'module_id' => $sales->id,
+            'name' => 'Receipt Voucher',
+            'slug' => 'app.sales.receipt_voucher',
+        ]);
+
+        Permission::updateOrCreate([
+            'module_id' => $sales->id,
+            'name' => 'Receipt Voucher Approval',
+            'slug' => 'app.sales.rv_approval',
+        ]);
+
+        Permission::updateOrCreate([
+            'module_id' => $sales->id,
+            'name' => 'Sales Return',
+            'slug' => 'app.sales.sr',
+        ]);
 
     }
 }

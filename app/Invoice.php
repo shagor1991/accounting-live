@@ -15,6 +15,33 @@ class Invoice extends Model
         return $items;
     }
 
+    public function project()
+    {
+        return $this->belongsTo(ProjectDetail::class,'project_id');
+
+    }
+
+    public function vatAmount()
+    {
+        return $this->hasMany(InvoiceItem::class,'invoice_id')->sum('vat_amount');
+    }
+
+    public function TotalAmount()
+    {
+        return $this->hasMany(InvoiceItem::class,'invoice_id')->sum('cost_price');
+    }
+    public function taxableAmount()
+    {
+        return $this->hasMany(InvoiceItem::class,'invoice_id')->sum('total_unit_price');
+    }
+
+
+    public function partyInfo($pi)
+    {
+        $pi=PartyInfo::where('pi_code',$pi)->first();
+        return $pi;
+    }
+
     public function taxbleSup($invoice_no)
     {
         return $this->items($invoice_no)->sum('total_unit_price');
@@ -34,5 +61,32 @@ class Invoice extends Model
     {
         // return $itm;
         return $this->hasMany(StockTransection::class, 'transection_id')->where('item_id',$itm)->where('stock_effect', -1)->sum('quantity');
+    }
+
+    public function invoiceAmount()
+    {
+        return $this->hasOne(InvoiceAmount::class,'invoice_id');
+    }
+    public function fifoInvoice()
+    {
+        return $this->hasMany(FifoInvoice::class,'invoice_id')->orderBy('id','desc');
+
+    }
+
+    public function deliveryNote()
+    {
+        return $this->belongsTo(DeliveryNote::class,'delivery_note_id');
+    }
+
+    //  work by mominul
+    public function receipt_voucher($id){
+        $paid_amount = ReceiptVoucher::where("tax_invoice_id", $id)->get();
+        return $paid_amount->sum("paid_amount");
+    }
+
+    public function journal()
+    {
+        // dd(1);
+        return $this->hasOne(Journal::class,'invoice_no','invoice_no');
     }
 }

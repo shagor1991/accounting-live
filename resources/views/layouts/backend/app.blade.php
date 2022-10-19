@@ -10,7 +10,10 @@
     <meta name="keywords" content="admin template, Frest admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="PIXINVENT">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Form Layouts - Frest - Bootstrap HTML admin template</title>
+    @php
+    $settings= \App\Setting::where('config_name', 'title_name')->first()
+    @endphp
+    <title>{{ $settings->config_value}} - @yield('title') </title>
     <link rel="apple-touch-icon" href="{{ asset('assets/backend')}}/app-assets/images/ico/apple-icon-120.png">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/backend')}}/app-assets/images/ico/favicon.ico">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,600%7CIBM+Plex+Sans:300,400,500,600,700" rel="stylesheet">
@@ -44,7 +47,56 @@
     <!-- BEGIN: Page CSS-->
     @stack('css')
     <!-- END: Page CSS-->
+    <style>
+        .table-bordered {
+            border: 1px solid #f4f4f4;
+        }
+        .table {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 20px;
+        }
+        table {
+            background-color: transparent;
+        }
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+        .tarek-container{
+        width: 85%;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 88% 12%;
+        background-color: #ffff;
+        }
+        .invoice-label{
+            font-size: 10px !important
+        }
+        .content-padding{
+            padding: 5px 10px 12px;
+        }
+        .content-title{
+            padding: 10px 0 0 10px;
+        }
+        .bx-filter{
+            font-size: 30px;
+            line-height: 0px;
+        }
 
+        /* Tareq custom css */
+        .active-button-sale{
+        color: red;
+        }
+        .card-body {
+        flex: 1 1 auto;
+        min-height: 1px;
+        padding: 0.5rem !important;
+        }
+
+
+        /* Tareq custom css */
+    </style>
 </head>
 <!-- END: Head-->
 

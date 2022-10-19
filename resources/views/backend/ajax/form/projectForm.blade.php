@@ -45,7 +45,7 @@
                     <label>Type</label>
                 </div>
                 <div class="col-md-8 form-group">
-                    <select name="proj_type" class="form-control" id=""
+                    <select name="proj_type" class="common-select2" style="width: 100% !important" id=""
                         required>
                         <option value="">Select...</option>
                         @foreach ($projectTypes as $item)

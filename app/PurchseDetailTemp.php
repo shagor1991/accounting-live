@@ -15,4 +15,7 @@ class PurchseDetailTemp extends Model
     public function groupName(){
         return $this->belongsTo(Group::class, 'group_id');
     }
+    public function vatRate(){
+        return $this->belongsTo(VatRate::class, 'vat_rate');
+    }
 }

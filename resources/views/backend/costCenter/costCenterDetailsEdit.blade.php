@@ -100,10 +100,10 @@
                                                                 </div>
 
                                                                 <div class="col-md-4">
-                                                                    <label>Project</label>
+                                                                    <label>Branch Name</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
-                                                                    <select name="project_id" class="form-control" id="" required >
+                                                                    <select name="project_id" class="common-select2" style="width: 100% !important" id="" required >
                                                                         <option value="">Select...</option>
                                                                         @foreach ($projects as $item)
                                                                          <option value="{{ $item->id }}"  {{ $item->id==$costCenter->project_id? "selected":"" }}>{{ $item->proj_name }}</option>
@@ -116,8 +116,10 @@
                                                                     @enderror
                                                                 </div>
                                                                 <div class="col-12 d-flex justify-content-end ">
-                                                                    <button class="btn btn-info cost-center-form-btn mr-1"
-                                                                        data_target="{{ route('costCenterForm') }}">New</button>
+
+                                                                    <a href="{{ route('costCenterDetails') }}" class="btn btn-info cost-center-form-btn mr-1">New</a>
+                                                                    {{-- <button class="btn btn-info cost-center-form-btn mr-1"
+                                                                        data_target="{{ route('costCenterForm') }}">New</button> --}}
                                                                     <button type="submit" class="btn btn-primary mr-1">Submit</button>
                                                                     <button type="reset" class="btn btn-light-secondary">Reset</button>
 
@@ -143,20 +145,20 @@
                             </form>
                         </div>
                         <div class="col-md-6 text-right">
-                            <a href="{{ route('pdf', $id = 'profitCenter') }}" class="btn btn-xs btn-info float-right"
+                            <a href="{{ route('pdf', $id = 'costCenter') }}" class="btn btn-xs btn-info float-right"
                                 target="_blank">Print</a>
-                            <button class="btn btn-xs btn-info float-right"
+                            <button class="btn btn-xs btn-info float-right mr-1"
                                 onclick="exportTableToCSV('profitcenterdetails.csv')">Export To CSV</button>
                         </div>
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-sm table-bordered">
                                 <thead class="thead-light">
                                     <tr>
                                         <th>Cost Center Code</th>
                                         <th>Cost Center Name</th>
                                         <th>Activity</th>
                                         <th>Person Resposible</th>
-                                        <th>Project</th>
+                                        <th>Branch Name</th>
 
                                         <th>Action</th>
                                     </tr>
@@ -169,9 +171,7 @@
                                             <td>{{ $cCenter->cc_name }}</td>
                                             <td>{{ $cCenter->activity }}</td>
                                             <td>{{ $cCenter->prsn_responsible }}</td>
-                                            <td>{{ $cCenter->project->proj_name }}</td>
-
-
+                                            <td>{{ isset($cCenter->project)? $cCenter->project->proj_name :"" }}</td>
                                             <td style="white-space: nowrap">
                                                 <a href="{{ route('costCenEdit', $cCenter) }}"
                                                     class="btn btn-sm btn-warning"><i class="bx bx-edit"></i></a>

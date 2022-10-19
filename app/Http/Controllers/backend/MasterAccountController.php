@@ -20,13 +20,15 @@ class MasterAccountController extends Controller
 
         $vat_types = VatType::get();
         $mstAccType = MstACType::get();
+        $categories=MstCatType::get();
         $mst_definitions = MstDefinition::get();
         $masterDetails = MasterAccount::where('mst_ac_type', '!=', 'Draft')->latest()->paginate(25);
-        return view('backend.masterAccount.masteAccDetails', compact('masterDetails', 'mst_definitions', 'mstAccType', 'vat_types'));
+        return view('backend.masterAccount.masteAccDetails', compact('masterDetails', 'mst_definitions', 'mstAccType', 'vat_types','categories'));
     }
 
     public function MasterDetailsPost(Request $request)
     {
+        // return $request;
         $request->validate(
             [
                 'mst_ac_head' => 'required',
@@ -44,7 +46,7 @@ class MasterAccountController extends Controller
         );
 
         $typeCat = MstACType::where('id', $request->mst_ac_type)->first();
-        $cat = MstCatType::where('id', $typeCat->cat_type)->latest()->first();
+        $cat = MstCatType::where('id', $request->category)->latest()->first();
 
         $latest_master = MasterAccount::withTrashed()->whereBetween('mst_ac_code', [$cat->value, $cat->value + 99])->latest()->first();
         if ($latest_master) {
@@ -60,13 +62,16 @@ class MasterAccountController extends Controller
             $masterAcc->mst_ac_code = $cat->value;
         }
 
+        $reserved= ($request->category) ==5 ? 1 : 0;
 
-        $masterAcc->mst_ac_head = $request->mst_ac_head;
-        $masterAcc->mst_definition = $request->mst_definition;
-
-        $masterAcc->mst_ac_type = $request->mst_ac_type;
-
-        $masterAcc->vat_type = $request->vat_type;
+        $masterAcc->mst_ac_head     = $request->mst_ac_head;
+        $masterAcc->account_type_id = $request->category;
+        $masterAcc->mst_definition  = $request->mst_definition;
+        $masterAcc->mst_ac_type     = $request->mst_ac_type;
+        $masterAcc->vat_type        = $request->vat_type;
+        $masterAcc->reserved        = $reserved;
+        $masterAcc->category_id     = $request->category;
+        
 
         $masterAS = $masterAcc->save();
 
@@ -83,11 +88,12 @@ class MasterAccountController extends Controller
             return back()->with('error', "Not Found");
         }
         $vat_types = VatType::get();
+        $categories=MstCatType::get();
 
         $mstAccType = MstACType::get();
         $mst_definitions = MstDefinition::get();
         $masterDetails = MasterAccount::where('mst_ac_type', '!=', 'Draft')->latest()->paginate(25);
-        return view('backend.masterAccount.masteAccDetails', compact('masterDetails', 'masterAcc', 'mst_definitions', 'mstAccType', 'vat_types'));
+        return view('backend.masterAccount.masteAccDetails', compact('masterDetails','categories', 'masterAcc', 'mst_definitions', 'mstAccType', 'vat_types'));
     }
 
 
@@ -139,7 +145,7 @@ class MasterAccountController extends Controller
             return back()->with('error', "It has Account Head");
         }
 
-        $masterAcc->delete();
+        $masterAcc->forceDelete();
         return redirect()->route('masteAccDetails')->with('success', "Deleted Successfully");
     }
 
@@ -191,6 +197,8 @@ class MasterAccountController extends Controller
         $accHead->fld_ac_code = $masterAcc->mst_ac_code . "-" . $accHead->ac_code;
         $accHead->fld_ms_ac_head = $masterAcc->mst_ac_head;
         $accHead->fld_definition = $masterAcc->mst_definition;
+        $accHead->account_type_id= $masterAcc->account_type_id;
+        $accHead->master_account_id= $masterAcc->id;
 
         $accHead->save();
 
@@ -277,8 +285,8 @@ class MasterAccountController extends Controller
     public function findMastedCode(Request $request)
     {
 
-        $typeCat = MstACType::where('id', $request->value)->first();
-        $cat = MstCatType::where('id', $typeCat->cat_type)->latest()->first();
+        // $typeCat = MstACType::where('id', $request->value)->first();
+        $cat = MstCatType::where('id', $request->value)->latest()->first();
 
         $latest_master = MasterAccount::withTrashed()->whereBetween('mst_ac_code', [$cat->value, $cat->value + 99])->latest()->first();
         if ($latest_master) {
@@ -299,6 +307,17 @@ class MasterAccountController extends Controller
 
             return $msCode;
 
+        }
+
+        public function deleteAcHead($acHead)
+        {
+            $head=AccountHead::find($acHead);
+            if(!$head)
+            {
+                return back()->with('error','Not Found');
+            }
+            $head->forceDelete();
+            return back()->with('success','Deleted Successfully');
         }
 
 }

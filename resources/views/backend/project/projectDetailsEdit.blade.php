@@ -41,13 +41,13 @@
                                                             <div class="row">
 
                                                                 <div class="col-md-4">
-                                                                    <label>Project No</label>
+                                                                    <label>Branch No</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
                                                                     <input type="text" id="" class="form-control"
-                                                                        name=""{{ $proj->proj_no }}
-                                                                        value="{{ isset($proj)? $proj->proj_no:"" }}"
-                                                                        placeholder="Project No" disabled readonly>
+                                                                        name=""
+                                                                        value="{{ isset($p_code)? $p_code: $proj->proj_no  }}"
+                                                                        placeholder="Branch No" disabled readonly>
                                                                     @error('proj_no')
                                                                         <div class="btn btn-sm btn-danger">{{ $message }}
                                                                         </div>
@@ -55,13 +55,13 @@
                                                                 </div>
 
                                                                 <div class="col-md-4">
-                                                                    <label>Project Name</label>
+                                                                    <label>Branch Name</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
                                                                     <input type="text" id="proj_name" class="form-control"
                                                                         name="proj_name"
                                                                         value="{{ isset($proj) ? $proj->proj_name : '' }}"
-                                                                        placeholder="Project Name" required >
+                                                                        placeholder="Project Name" required>
                                                                     @error('proj_name')
                                                                         <div class="btn btn-sm btn-danger">{{ $message }}
                                                                         </div>
@@ -71,8 +71,8 @@
                                                                     <label>Type</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
-                                                                    <select name="proj_type" class="form-control" id=""
-                                                                    required>
+                                                                    <select name="proj_type" class="common-select2" style="width: 100% !important" id=""
+                                                                        required>
                                                                         <option value="">Select...</option>
                                                                         @foreach ($projectTypes as $item)
                                                                             <option value="{{ $item->title }}"
@@ -86,33 +86,34 @@
                                                                     @enderror
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <label>Consulting Agent</label>
+                                                                    <label>Manager</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
-                                                                    <input type="text" id="cons_agent"
-                                                                        class="form-control"
-                                                                        value="{{ isset($proj) ? $proj->cons_agent : '' }}"
-                                                                        name="cons_agent" placeholder="Consulting Agent"
-                                                                        required>
-                                                                    @error('cons_agent')
+                                                                    <input type="text" id="owner_name"
+                                                                        class="form-control" name="owner_name"
+                                                                        value="{{ isset($proj) ? $proj->owner_name : '' }}"
+                                                                        placeholder="Manager" required>
+                                                                    @error('owner_name')
                                                                         <div class="btn btn-sm btn-danger">{{ $message }}
                                                                         </div>
                                                                     @enderror
                                                                 </div>
 
+
                                                                 <div class="col-md-4">
-                                                                    <label>Site Location</label>
+                                                                    <label>Site Address</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group ">
                                                                     <input type="text" id="address" class="form-control"
                                                                         name="address"
                                                                         value="{{ isset($proj) ? $proj->address : '' }}"
-                                                                        placeholder="Site Location" required>
+                                                                        placeholder="Site Address" required>
                                                                     @error('address')
                                                                         <div class="btn btn-sm btn-danger">{{ $message }}
                                                                         </div>
                                                                     @enderror
                                                                 </div>
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -121,14 +122,15 @@
                                                             <div class="row">
 
                                                                 <div class="col-md-4">
-                                                                    <label>Owner Name</label>
+                                                                    <label>Office Phone No</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
-                                                                    <input type="text" id="owner_name"
-                                                                        class="form-control" name="owner_name"
-                                                                        value="{{ isset($proj) ? $proj->owner_name : '' }}"
-                                                                        placeholder="Owner Name" required>
-                                                                    @error('owner_name')
+                                                                    <input type="text" id="cons_agent"
+                                                                        class="form-control"
+                                                                        value="{{ isset($proj) ? $proj->cons_agent : '' }}"
+                                                                        name="cons_agent" placeholder="Office Phone No"
+                                                                        required>
+                                                                    @error('cons_agent')
                                                                         <div class="btn btn-sm btn-danger">{{ $message }}
                                                                         </div>
                                                                     @enderror
@@ -149,7 +151,7 @@
                                                                     @enderror
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <label>Work Order Date</label>
+                                                                    <label>Trade License Issue Date</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
                                                                     <input type="date" id="ord_date" class="form-control"
@@ -162,7 +164,7 @@
                                                                     @enderror
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <label>Handover Date</label>
+                                                                    <label>License Expiery</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
                                                                     <input type="date" id="hnd_over_date"
@@ -178,10 +180,10 @@
                                                                     <label>Profit Center</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group ">
-                                                                   <select name="profit_pc_code" class="form-control" id="" required>
+                                                                   <select name="profit_pc_code" class="common-select2" style="width: 100% !important" id="" required>
                                                                        <option value="">Select...</option>
                                                                        @foreach ($profit_centers as $item)
-                                                                       <option value="{{ $item->pc_code }}" {{ $proj->pc_code==$item->pc_code? "selected":"" }}>{{ $item->pc_name }} </option>
+                                                                       <option value="{{ $item->pc_code }}" {{ isset($proj)? ($proj->pc_code==$item->pc_code? 'selected':''):'' }}>{{ $item->pc_name }}  </option>
 
                                                                        @endforeach
                                                                    </select>
@@ -191,8 +193,9 @@
                                                                     @enderror
                                                                 </div>
                                                                 <div class="col-12 d-flex justify-content-end ">
-                                                                    <button class="btn btn-info project-form-btn  mr-1"
-                                                                    data_target="{{ route('projectForm') }}">New</button>
+                                                                    {{-- <button class="btn btn-info project-form-btn  mr-1"
+                                                                    data_target="{{ route('projectForm') }}">New</button> --}}
+                                                                    <a href="{{ route('projectDetails') }}" class="btn btn-info mr-1" >New</a>
                                                                     <button type="submit"
                                                                         class="btn btn-primary mr-1" >Submit</button>
                                                                     <button type="reset"
@@ -229,24 +232,24 @@
                         <div class="col-md-6 text-right">
                             <a href="{{ route('pdf', $id = 'projDetails') }}" class="btn btn-xs btn-info float-right"
                                 target="_blank">Print</a>
-                            <button class="btn btn-xs btn-info float-right"
+                            <button class="btn btn-xs btn-info float-right mr-1"
                                 onclick="exportTableToCSV('projectdetails.csv')">Export To CSV</button>
                         </div>
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-sm table-bordered">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th>Project No</th>
-                                        <th>Project Name</th>
-                                        <th>Project Type</th>
-                                        <th>Consulting Agent</th>
-                                        <th>Site Location</th>
-                                        <th>Owner Name</th>
-                                        <th>Mobile Number</th>
-                                        <th>Work Order Date</th>
-                                        <th>Handover Date</th>
-                                        <th>Profit Center</th>
+                                        <th>Branch No</th>
+                                        <th>Branch Name</th>
+                                        <th>Branch Type</th>
+                                        <th>Manager</th>
+                                        <th>Site Address</th>
 
+                                        <th>Office Phone No</th>
+                                        <th>Mobile Number</th>
+                                        {{-- <th>Trade License Issue Date</th>
+                                        <th>License Expier</th>
+                                        <th>Profit Center</th> --}}
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -257,15 +260,19 @@
                                             <td>{{ $proj->proj_no }}</td>
                                             <td>{{ $proj->proj_name }}</td>
                                             <td>{{ $proj->proj_type }}</td>
-                                            <td>{{ $proj->cons_agent }}</td>
-                                            <td>{{ $proj->address }}</td>
                                             <td>{{ $proj->owner_name }}</td>
+
+                                            <td>{{ $proj->address }}</td>
+                                            <td>{{ $proj->cons_agent }}</td>
                                             <td>{{ $proj->cont_no }}</td>
-                                            <td>{{ $proj->ord_date }}</td>
+                                            {{-- <td>{{ $proj->ord_date }}</td>
                                             <td>{{ $proj->hnd_over_date }}</td>
-                                            <td>{{ $proj->profitCenter($proj->pc_code)->pc_name }}</td>
+                                            <td>{{ $proj->profitCenter($proj->pc_code)->pc_name }}</td> --}}
 
                                             <td style="white-space: nowrap">
+                                                <a href="{{ route('projectView', $proj) }}"
+                                                class="btn btn-sm btn-warning"><i
+                                                    class="bx bx-hide "></i></a>
                                                 <a href="{{ route('projectEdit', $proj) }}"
                                                     class="btn btn-sm btn-warning"><i class="bx bx-edit"></i></a>
                                                 <a href="{{ route('projectDelete', $proj) }}"

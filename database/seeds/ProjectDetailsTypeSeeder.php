@@ -13,37 +13,11 @@ class ProjectDetailsTypeSeeder extends Seeder
     public function run()
     {
         ProjectDetailsType::create([
-            'title'=>'One Story Villa',
+            'title'=>'Retail Store',
         ]);
 
         ProjectDetailsType::create([
-            'title'=>'Two Story Villa',
-        ]);
-
-        ProjectDetailsType::create([
-            'title'=>'Double Story Villa',
-        ]);
-
-        ProjectDetailsType::create([
-            'title'=>'Villa (G+1)',
-        ]);
-
-        ProjectDetailsType::create([
-            'title'=>'Double Story Villa + Kitchen',
-        ]);
-
-
-        ProjectDetailsType::create([
-            'title'=>'Kitchen Block',
-        ]);
-
-
-        ProjectDetailsType::create([
-            'title'=>'Single Story Villa + B.W',
-        ]);
-
-        ProjectDetailsType::create([
-            'title'=>'Single Story Villa',
+            'title'=>'Warehouse',
         ]);
 
     }

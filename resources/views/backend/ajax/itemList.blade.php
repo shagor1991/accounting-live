@@ -2,9 +2,9 @@
     <tr style="line-height: 0px;">
         <td>{{$itme_list->barcode}}</td>
         <td>{{$itme_list->item_name}}</td>
-        <td>{{$itme_list->groupName->item_type}}</td>
-        <td>{{$itme_list->unit}}</td>
         <td>{{$itme_list->sell_price}}</td>
+        <td>{{$itme_list->vat_amount}}</td>
+        <td>{{$itme_list->total_amount}}</td>
         <td>
             <div class="btn-group mr-1 mb-1">
                 <div class="dropdown">

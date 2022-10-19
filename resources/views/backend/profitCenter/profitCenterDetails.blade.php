@@ -135,11 +135,11 @@
                         <div class="col-md-6 text-right">
                             <a href="{{ route('pdf', $id = 'profitCenter') }}" class="btn btn-xs btn-info float-right"
                                 target="_blank">Print</a>
-                            <button class="btn btn-xs btn-info float-right"
+                            <button class="btn btn-xs btn-info float-right mr-1"
                                 onclick="exportTableToCSV('profitcenterdetails.csv')">Export To CSV</button>
                         </div>
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-sm table-bordered">
                                 <thead class="thead-light">
                                     <tr>
                                         <th>Profit Center Code</th>

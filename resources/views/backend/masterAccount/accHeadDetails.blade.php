@@ -130,7 +130,7 @@
                                     <ul>
                                        @foreach (App\Models\AccountHead::where('ma_code',$masterAcc->mst_ac_code)->get() as $item)
 
-                                         <li><a href="#" class="bx bx-edit editAccHead" data-target="{{ route('editAccHead', $item) }}">{{ $item->fld_ac_code }} {{ $item->fld_ac_head }}</a> </li>
+                                         <li><a href="#" class="bx bx-edit editAccHead" data-target="{{ route('editAccHead', $item) }}">{{ $item->fld_ac_code }} {{ $item->fld_ac_head }}</a> <a href="{{ route('deleteAcHead',$item) }}" class="bx bx-trash text-danger" onclick="return confirm('Delete Account Head. Confirm?')"></a></li>
                                        @endforeach
                                     </ul>
                                 <br>

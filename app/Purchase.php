@@ -18,6 +18,24 @@ class Purchase extends Model
     public function payTerm(){
         return $this->belongsTo(PayTerm::class, 'pay_term');
     }
+    public function prInfo(){
+        return $this->belongsTo(PurchaseRequisition::class, 'pr_id');
+    }
+    public function purchase_details(){
+        return $this->hasMany(PurchaseDetail::class, 'purchase_no', 'purchase_no');
+    }
+    public function gr_details(){
+        return $this->hasOne(GoodsReceived::class, "po_no", 'purchase_no');
+    }
+    public function gr_details_check($po_no){
+        $gr_list = GoodsReceived::where("po_no", $po_no)->where("status", 1)->get();
+        $total_qty = 0;
+        foreach($gr_list as $gr_no){
+            $gr_qty = GoodsReceivedDetails::where('goods_received_no', $gr_no->goods_received_no)->sum('received_qty');
+            $total_qty += $gr_qty;
+        }
+        return $total_qty;
+    }
     //  work by tarek
     public function stocks()
     {

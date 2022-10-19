@@ -1,5 +1,6 @@
 @extends('layouts.backend.app')
 
+@section('title', 'item-purchase')
 @section('content')
     <!-- BEGIN: Content-->
     <div class="app-content content">
@@ -12,7 +13,7 @@
                             <form action="{{route('item-purchase.store')}}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="border-bottom">
-                                    <h4>Purchase</h4>
+                                    <h4>Product Purchase Order</h4>
                                 </div>
                                     <div class="row">
                                         <div class="col-sm-3 col-12 mb-1">
@@ -40,7 +41,7 @@
                                             @enderror
                                         </div>
                                         <div class="col-sm-2 col-12 mb-1">
-                                            <label for="project_id">Project Name</label>
+                                            <label for="project_id">Branch Name</label>
                                             <select name="project_id" id="project_id" class="form-control" required>
                                                 <option value=""></option>
                                                 @foreach ($projects as $project)
@@ -134,7 +135,7 @@
                                         @enderror
                                     </div>
                                     <div class="col-sm-3 col-12 mb-1">
-                                        <label for="tax_invoice_no">Tax Invoice No</label>
+                                        <label for="tax_invoice_no">Quotation / Reference No</label>
                                         <input type="text" required class="form-control" name="tax_invoice_no" id="tax_invoice_no" value="{{old('tax_invoice_no')}}">
                                         @error('tax_invoice_no')
                                             <span class="error">{{ $message }}</span>
@@ -242,7 +243,7 @@
                                             <th scope="col">Brand</th>
                                             <th scope="col">Shipment ID</th>
                                             <th scope="col">Pur. Rate</th>
-                                            <th scope="col">Q'ty</th>
+                                            <th scope="col">Qty</th>
                                             <th scope="col">Amount</th>
                                             <th scope="col">Unit</th>
                                             <th scope="col">Action</th>

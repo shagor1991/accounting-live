@@ -3,6 +3,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.0/css/toastr.css" rel="stylesheet" />
 
 @endpush
+@section('title', 'color')
 @section('content')
     <!-- BEGIN: Content-->
     <div class="app-content content">
@@ -15,36 +16,28 @@
                   <div class="row">
                       <div class="col-12">
                           <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Brand Information</h4>
+                            <div class="content-title">
+                                <h4>Color Information</h4>
                             </div>
-                              <div class="card-body">
+                              <div class="card-body content-padding">
                                 <form action="{{ route('brand.store') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row match-height">
                                         <div class="col-md-6">
-                                            <label for="">Brand ID</label>
+                                            <label for="">Color ID</label>
                                             @php
                                             $brand_id = '';
-                                            $lest_bnd_id = App\Brand::latest('id')->first();
-                                                if($lest_bnd_id){
-                                                    if($lest_bnd_id->id <= 9){
-                                                        $brand_id = 'BND-000'.($lest_bnd_id->id + 1);
-                                                    }elseif ($lest_bnd_id->id <= 99) {
-                                                        $brand_id = 'BND-00'.($lest_bnd_id->id + 1);
-                                                    }elseif ($lest_bnd_id->id <= 100) {
-                                                        $brand_id = 'BND-0'.($lest_bnd_id->id + 1);
-                                                    }elseif ($lest_bnd_id->id <= 1000) {
-                                                        $brand_id = 'BND-'.($lest_bnd_id->id + 1);
-                                                    }
+                                            $max_bnd_id = App\Brand::max('brand_id');
+                                                if($max_bnd_id){
+                                                    $brand_id = $max_bnd_id + 1;
                                                 }else {
-                                                    $brand_id = 'BND-0001';
+                                                    $brand_id = 11;
                                                 }
                                             @endphp
                                             <input type="text" name="brand_id" class="form-control" readonly value="{{$brand_id}}">
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="">Brand Name</label>
+                                            <label for="">Color</label>
                                             <input type="text" name="name" class="form-control">
                                         </div>
                                         <div class="col-md-6">
@@ -56,9 +49,9 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-12 d-flex justify-content-end mt-1">
-                                            <button type="submit" class="btn btn-primary mr-1">Submit</button>
-                                            <button type="reset" class="btn mr-1" id="reset">Reset</button>
+                                        <div class="col-6 d-flex justify-content-end mt-1">
+                                            <button type="submit" class="btn btn-primary btn-sm mr-1">Submit</button>
+                                            <button type="reset" class="btn mr-1 btn-sm" id="reset">Reset</button>
                                         </div>
                                     </div>
                                 </form>
@@ -67,12 +60,12 @@
                       </div>
                   </div>
 
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead class="thead-light">
+                <div class="table-responsive card">
+                    <table class="table table-sm table-bordered">
+                        <thead class="user-table-body">
                         <tr>
-                            <th>Brand ID</th>
-                            <th>Brand Name</th>
+                            <th>Color ID</th>
+                            <th>Color</th>
                             <th>Origin</th>
                             <th>Action</th>
                         </tr>
@@ -80,7 +73,7 @@
 
                         <tbody class="user-table-body">
                             @foreach ($brands as $brand)
-                            <tr>
+                            <tr  class="data-row">
                                 <td>{{ $brand->brand_id }}</td>
                                 <td>{{ $brand->name }}</td>
                                 <td>{{ $brand->origin }}</td>

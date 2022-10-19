@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\backend;
 
 use App\Brand;
+use App\Fifo;
+use App\FifoInvoice;
+use App\GoodsReceivedDetails;
 use App\Group;
 use App\Http\Controllers\Controller;
 use App\InvoiceItem;
@@ -14,6 +17,12 @@ use App\PurchseDetailTemp;
 use App\Unit;
 use App\VatRate;
 use Illuminate\Http\Request;
+use App\Imports\BulkImport;
+use App\PurchaseRequisitionDetail;
+use App\PurchaseRequisitionDetailTemp;
+use App\StockTransection;
+use App\Style;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ItemListController extends Controller
 {
@@ -24,12 +33,13 @@ class ItemListController extends Controller
      */
     public function index()
     {
-        $itme_lists = ItemList::paginate(15);
+        $itme_lists = ItemList::orderBy("barcode")->paginate(20);
         $units = Unit::all();
         $vatRates = VatRate::all();
         $brands = Brand::all();
         $groups = Group::all();
-        return view('backend.item-list.index', compact('itme_lists', 'units', 'vatRates', 'brands', 'groups'));
+        $styles = Style::all();
+        return view('backend.item-list.index', compact('itme_lists', 'units', 'vatRates', 'brands', 'groups', 'styles'));
     }
 
     /**
@@ -51,9 +61,9 @@ class ItemListController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'item_type_no' => 'required',
+            'style_id' => 'required',
             'item_type' => 'required',
-            'barcode' => 'required',
+            'barcode' => 'required|unique:items,barcode',
             'item_name' => 'required',
             'brand_id' => 'required',
             'country' => 'required',
@@ -62,11 +72,17 @@ class ItemListController extends Controller
             'sell_price' => 'required',
             'vat_rate' => 'required',
             'vat_amount' => 'required',
-        ]);
+        ],
+        [
+            'barcode.unique'=> "same product exist"
+        ]
+        );
         $item_list = new ItemList;
-        $item_list->groups_item_type_no = $request->item_type_no;
-        $item_list->groups_item_type = $request->item_type;
+        $group = Group::where('id', $request->item_type)->first();
+        $item_list->group_name = $group->group_name;
+        $item_list->group_no = $group->group_no;
         $item_list->barcode = $request->barcode;
+        $item_list->style_id = $request->style_id;
         $item_list->item_name = $request->item_name;
         $item_list->brand_id = $request->brand_id;
         $item_list->country = $request->country;
@@ -75,6 +91,7 @@ class ItemListController extends Controller
         $item_list->sell_price = $request->sell_price;
         $item_list->vat_rate = $request->vat_rate;
         $item_list->vat_amount = $request->vat_amount;
+        $item_list->total_amount = $request->total_amount;
         $item_list->save();
         $notification= array(
             'message'       => 'Item Listing successfully!',
@@ -96,7 +113,8 @@ class ItemListController extends Controller
         $vatRates = VatRate::all();
         $brands = Brand::all();
         $groups = Group::all();
-        return view('backend.item-list.show', compact('item_info', 'units', 'vatRates', 'brands', 'groups'));
+        $itme_lists = ItemList::orderBy("barcode")->paginate(20);
+        return view('backend.item-list.show', compact('item_info', 'units', 'vatRates', 'brands', 'groups', 'itme_lists'));
     }
 
     /**
@@ -112,7 +130,9 @@ class ItemListController extends Controller
         $vatRates = VatRate::all();
         $brands = Brand::all();
         $groups = Group::all();
-        return view('backend.item-list.edit', compact('item_info', 'units', 'vatRates', 'brands', 'groups'));
+        $styles = Style::all();
+        $itme_lists = ItemList::orderBy("barcode")->paginate(20);
+        return view('backend.item-list.edit', compact('item_info', 'units', 'vatRates', 'brands', 'groups', 'styles','itme_lists'));
     }
 
     /**
@@ -125,9 +145,9 @@ class ItemListController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'item_type_no' => 'required',
             'item_type' => 'required',
-            'barcode' => 'required',
+            'barcode' => 'required|unique:items,barcode,'.$id,
+            'style_id' => 'required',
             'item_name' => 'required',
             'brand_id' => 'required',
             'country' => 'required',
@@ -136,11 +156,17 @@ class ItemListController extends Controller
             'sell_price' => 'required',
             'vat_rate' => 'required',
             'vat_amount' => 'required',
-        ]);
+        ],
+        [
+            'barcode.unique'=> "same product exist"
+        ]
+        );
         $item_list = ItemList::find($id);
-        $item_list->groups_item_type_no = $request->item_type_no;
-        $item_list->groups_item_type = $request->item_type;
+        $group = Group::where('group_name', $request->item_type)->first();
+        $item_list->group_name = $group->group_name;
+        $item_list->group_no = $group->group_no;
         $item_list->barcode = $request->barcode;
+        $item_list->style_id = $request->style_id;
         $item_list->item_name = $request->item_name;
         $item_list->brand_id = $request->brand_id;
         $item_list->country = $request->country;
@@ -149,6 +175,7 @@ class ItemListController extends Controller
         $item_list->sell_price = $request->sell_price;
         $item_list->vat_rate = $request->vat_rate;
         $item_list->vat_amount = $request->vat_amount;
+        $item_list->total_amount = $request->total_amount;
         $item_list->save();
         $notification= array(
             'message'       => 'Item Listing Updated successfully!',
@@ -178,35 +205,73 @@ class ItemListController extends Controller
             return response()->json($item_type_id);
         }
     }
-    public function item_type_id(Request $request){
-        $item_type = $request->item_id;
-        if($item_type){
-            $item_type_no = Group::all();
-            return response()->json($item_type_no);
-        }else{
-            $item_type_no = [];
-            return response()->json($item_type_no);
-        }
+    public function group_id(Request $request){
+        $group = Group::find($request->group_id);
+        return $group;
     }
     public function brand_country(Request $request){
         $brand_country = Brand::where('id', $request->brand_id)->first();
-        return $brand_country->origin;
+        return $brand_country;
     }
     public function item_delete(ItemList $id)
-    {
-        $searching1 = PurchseDetail::where('item_id', $id->id)->count();
-        $searching2 = PurchseDetailTemp::where('item_id', $id->id)->count();
+    {   $searching = PurchaseRequisitionDetail::where('item_id', $id->id)->count();
+        $searching1 = PurchseDetailTemp::where('item_id', $id->id)->count();
+        $searching2 = PurchseDetail::where('item_id', $id->id)->count();
         $searching3 = InvoiceItem::where('item_id', $id->id)->count();
         $searching4 = InvoiceItemTemp::where('item_id', $id->id)->count();
-        if ($searching1 > 0 || $searching2 > 0 || $searching3 > 0 || $searching4 > 0) {
+        $searching5 = Fifo::where('item_id', $id->id)->count();
+        $searching6 = FifoInvoice::where('item_id', $id->id)->count();
+        $searching7 = StockTransection::where('item_id', $id->id)->count();
+        if ($searching > 0  || $searching1 > 0 || $searching2 > 0 || $searching3 > 0 || $searching4 > 0 || $searching5 > 0 || $searching6 > 0 || $searching7 > 0) {
             return back()->with('error', "It has Related with Others Table");
         }
-        dd($id);
         $id->delete();
         $notification= array(
             'message'       => 'Item Deleted successfully!',
             'alert-type'    => 'success'
         );
         return redirect('item-list')->with($notification);
+    }
+    public function vat_type_value(Request $request){
+        $vat_type = VatRate::find($request->vat_type_id);
+        return $vat_type->value;
+    }
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => "required"
+        ]);
+        $save = Excel::import(new BulkImport,request()->file('file'));
+        $notification= array(
+            'message'       => 'Item Added successfully!',
+            'alert-type'    => 'success'
+        );
+        return redirect('item-list')->with($notification);
+    }
+    public function item_barcode(Request $request){
+        $item_barcode = ItemList::find($request->item_id);
+        return $item_barcode;
+    }
+    public function item_barcode_check(Request $request){
+        $item_barcode = ItemList::where("barcode", $request->barcode)->first();
+        if($item_barcode){
+            return "same product exist";
+        }else{
+            return "";
+        }
+        
+    }
+    public function item_name_auto_select(Request $request){
+        $item = ItemList::where('barcode',$request->barcode)->first();
+        return $item;
+    }
+    public function items_download(){
+        $itme_lists = ItemList::orderBy("barcode", "asc")->get();
+        $units = Unit::all();
+        $vatRates = VatRate::all();
+        $brands = Brand::all();
+        $groups = Group::all();
+        $styles = Style::all();
+        return view('backend.item-list.items-download', compact('itme_lists', 'units', 'vatRates', 'brands', 'groups', 'styles'));
     }
 }

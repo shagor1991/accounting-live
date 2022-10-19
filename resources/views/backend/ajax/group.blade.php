@@ -1,7 +1,7 @@
 @foreach ($groups as $item)
-    <tr>
-        <td>{{$item->item_type_no}}</td>
-        <td>{{$item->item_type}}</td>
+    <tr class="data-row">
+        <td>{{$item->group_no}}</td>
+        <td>{{$item->group_name}}</td>
         <td>
             <a href="{{route('group.edit', $item->id)}}" class="btn btn-sm btn-warning"><i class="bx bx-edit"></i></a>                                    
             <a href="">

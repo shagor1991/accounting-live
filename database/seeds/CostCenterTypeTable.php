@@ -27,5 +27,6 @@ class CostCenterTypeTable extends Seeder
         CostCenterType::create([
             'title'=>'Government Body',
         ]);
+
     }
 }

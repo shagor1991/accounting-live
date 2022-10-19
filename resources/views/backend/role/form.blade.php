@@ -1,5 +1,7 @@
 @extends('layouts.backend.app')
 
+@section('title', 'Role Management')
+
 @push('css')
     
 @endpush

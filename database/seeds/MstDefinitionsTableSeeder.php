@@ -13,35 +13,43 @@ class MstDefinitionsTableSeeder extends Seeder
     public function run()
     {
         MstDefinition::create([
-            'title'=>'Sales Turnover',
-        ]);
-        MstDefinition::create([
-            'title'=>'Rent Income',
-        ]);
-        MstDefinition::create([
             'title'=>'Fixed Asset',
         ]);
         MstDefinition::create([
             'title'=>'Liquid Asset',
         ]);
         MstDefinition::create([
-            'title'=>'Current / Operating Asset',
+            'title'=>'Current/Operating Asset',
         ]);
         MstDefinition::create([
             'title'=>'Current Liability',
         ]);
+
         MstDefinition::create([
             'title'=>'Owners Investment',
         ]);
         MstDefinition::create([
             'title'=>'Long Term Liability',
         ]);
+
+        MstDefinition::create([
+            'title'=>'Sales Turnover',
+        ]);
+
         MstDefinition::create([
             'title'=>'Sell of Asset',
         ]);
+
+
+        MstDefinition::create([
+            'title'=>'Rent Income',
+        ]);
+
         MstDefinition::create([
             'title'=>'Other Income',
         ]);
+
+
         MstDefinition::create([
             'title'=>'Cost of Sales / Goods Sold',
         ]);
@@ -49,22 +57,32 @@ class MstDefinitionsTableSeeder extends Seeder
             'title'=>'Administrative Expense',
         ]);
         MstDefinition::create([
-            'title'=>'Marketing, advertising, and promotion',
+            'title'=>'Marketing, Advertising, and Promotion',
         ]);
         MstDefinition::create([
-            'title'=>'Salaries, benefits and wages',
+            'title'=>'Salaries, Benefits and Wages',
         ]);
         MstDefinition::create([
             'title'=>'Utility Expenses',
         ]);
+
         MstDefinition::create([
-            'title'=>'Rent and insurance',
+            'title'=>'Rent and Insurance',
         ]);
+
         MstDefinition::create([
-            'title'=>'Depreciation and amortization',
+            'title'=>'Depreciation and Amortization',
         ]);
         MstDefinition::create([
             'title'=>'Property Investment',
+        ]);
+
+        MstDefinition::create([
+            'title'=>'Financial Expenses',
+        ]);
+
+        MstDefinition::create([
+            'title'=>'Accumulated Depreciation & Amortization',
         ]);
 
     }

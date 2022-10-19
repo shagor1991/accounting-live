@@ -14,22 +14,37 @@ class SettingsTableSeeder extends Seeder
     {
         Setting::updateOrCreate([
             'config_name' => 'company_name',
-            'config_value' => 'Zinith Accounting & Inventory',
+            'config_value' => 'Cotton Mart LLC',
         ]);
 
         Setting::updateOrCreate([
             'config_name' => 'company_address',
-            'config_value' => 'Test Address',
+            'config_value' => 'Office No- 11, Jurf industrail zone3, Ajman, Ajman, United Arab Emirates, 2449',
         ]);
 
         Setting::updateOrCreate([
             'config_name' => 'company_tele',
-            'config_value' => '01914564744',
+            'config_value' => '+971526860005',
         ]);
 
         Setting::updateOrCreate([
             'config_name' => 'company_email',
-            'config_value' => 'info@zinith-audit.com',
+            'config_value' => 'cotton-mart@gmail.com',
+        ]);
+
+        Setting::updateOrCreate([
+            'config_name' => 'title_name',
+            'config_value' => 'Cotton Mart',
+        ]);
+
+        Setting::updateOrCreate([
+            'config_name' => 'trn_no',
+            'config_value' => '100516955000003',
+        ]);
+
+        Setting::updateOrCreate([
+            'config_name' => 'currency',
+            'config_value' => 'AED',
         ]);
     }
 }

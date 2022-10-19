@@ -9,4 +9,9 @@ class PartyInfo extends Model
 {
     use  SoftDeletes;
 
+    public function journals()
+    {
+        return $this->hasMany(Journal::class,'party_info_id');
+    }
+
 }

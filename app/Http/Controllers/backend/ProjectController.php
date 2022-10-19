@@ -12,11 +12,31 @@ class ProjectController extends Controller
 {
     public function projectDetails()
     {
+        $latest = ProjectDetail::withTrashed()->latest()->first();
+
+        if ($latest) {
+            $pn_code=preg_replace('/^PN-/', '', $latest->proj_no);
+            ++$pn_code;
+        } else {
+            $pn_code = 1;
+        }
+        if($pn_code<10)
+        {
+            $p_code="PN-00".$pn_code;
+        }
+        elseif($pn_code<100)
+        {
+            $p_code="PN-0".$pn_code;
+        }
+        else
+        {
+            $p_code="PN-".$pn_code;
+        }
         // dd(1);
         $profit_centers=ProfitCenter::get();
         $projectTypes=ProjectDetailsType::get();
         $projDetails=ProjectDetail::where('proj_type','!=',"Draft")->latest()->paginate(25);
-        return view('backend.project.projectDetails',compact('projDetails','projectTypes','profit_centers'));
+        return view('backend.project.projectDetails',compact('projDetails','projectTypes','profit_centers','p_code'));
     }
 
     public function projectDetailsPost(Request $request)
@@ -155,7 +175,7 @@ class ProjectController extends Controller
         {
             return back()->with('error', "Not Found");
         }
-        $proj->delete();
+        $proj->forceDelete();
         return redirect()->route('projectDetails')->with('success', "Deleted Successfully");
     }
     public function projectForm(Request $request)
@@ -185,5 +205,16 @@ class ProjectController extends Controller
         if ($request->ajax()) {
             return Response()->json(['page' => view('backend.ajax.form.projectForm', ['p_code' => $p_code,'projectTypes' => $projectTypes, 'profit_centers'=>$profit_centers])->render()]);
         }
+    }
+
+    public function projectView($project)
+    {
+        $proj=ProjectDetail::find($project);
+        if(!$proj)
+        {
+            return back()->with('error', "Not Found");
+        }
+
+        return view('backend.project.projectDetailsView',compact('proj'));
     }
 }

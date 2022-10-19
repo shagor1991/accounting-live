@@ -16,10 +16,11 @@
                  <div class="row">
                         <table id="customers">
                             <tr>
-                                <th>Profit Center Code</th>
-                                <th>Profit Center Name</th>
-                                <th>Activity</th>
-                                <th>Person Resposible</th>
+                                <th>Cost Center Code</th>
+                                        <th>Cost Center Name</th>
+                                        <th>Activity</th>
+                                        <th>Person Resposible</th>
+                                        <th>Branch Name</th>
                             </tr>
 
                             @foreach ($costCenters as $cCenter)
@@ -28,6 +29,8 @@
                                 <td>{{ $cCenter->cc_name }}</td>
                                 <td>{{ $cCenter->activity }}</td>
                                 <td>{{ $cCenter->prsn_responsible }}</td>
+                                <td>{{ isset($cCenter->project)? $cCenter->project->proj_name :"" }}</td>
+
 
                             </tr>
 

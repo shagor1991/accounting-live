@@ -15,4 +15,10 @@ class InvoiceItem extends Model
         return $this->belongsTo(ItemList::class);
     }
 
+    public function fifoInvoiceItem($inv,$item)
+    {
+        $fifoInvItm=FifoInvoice::where('invoice_id',$inv)->where('item_id',$itm)->get();
+        return $fifoInvItm;
+    }
+
 }

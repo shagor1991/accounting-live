@@ -38,13 +38,33 @@ class SettingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'config_name'   => 'required',
+            'config_name'   => 'required|unique:settings',
             'config_value'   => 'required'
         ]);
 
+
+        // voucher scan upload
+        if($request->hasFile('config_value')){
+            $config_value= $request->file('config_value');
+            $name= $config_value->getClientOriginalName();
+            $name = pathinfo($name, PATHINFO_FILENAME);
+            $ext= $config_value->getClientOriginalExtension();
+            $settings_file_name= $name.time().'.'.$ext;
+            $config_value->storeAs( 'public/upload/settings', $settings_file_name);
+
+        }
+
         $settings= new Setting;
         $settings->config_name      = $request->config_name;
-        $settings->config_value     = $request->config_value;
+        $settings->config_type      = $request->config_type;
+        $settings->config_value     = '';
+        
+        if($settings->config_type=='text'){
+            $settings->config_value     = $request->config_value;
+        }else{
+            $settings->config_value     = $settings_file_name;
+        }
+        
         $settings->save();
 
         $notification= array(
@@ -86,7 +106,44 @@ class SettingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
+
+        $request->validate([
+            'config_name'   => 'required',
+            'config_value'   => 'required'
+        ]);
+
+        // return $request;
+
+        // voucher scan upload
+        if($request->hasFile('config_value')){
+            $config_value= $request->file('config_value');
+            $name= $config_value->getClientOriginalName();
+            $name = pathinfo($name, PATHINFO_FILENAME);
+            $ext= $config_value->getClientOriginalExtension();
+            $settings_file_name= $name.time().'.'.$ext;
+            $config_value->storeAs( 'public/upload/settings', $settings_file_name);
+
+        }
+
+        $settings= Setting::find($id);
+        $settings->config_name      = $request->config_name;
+        $settings->config_type      = $request->config_type;
+        $settings->config_value     = '';
+        
+        if($settings->config_type=='text'){
+            $settings->config_value     = $request->config_value;
+        }else{
+            $settings->config_value     = $settings_file_name;
+        }
+
+        $settings->save();
+
+        $notification= array(
+            'message'       => 'Settings Updated!',
+            'alert-type'    => 'success'
+        );
+        return redirect('settings')->with($notification);
     }
 
     /**

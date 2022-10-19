@@ -18,7 +18,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        Gate::authorize('app.roles.index');
+        Gate::authorize('app.access_control.role');
         $roles= Role::all();
         return view('backend.role.index',compact('roles'));
     }
@@ -30,7 +30,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        Gate::authorize('app.roles.create');
+        Gate::authorize('app.access_control.role');
         $modules= Module::all();
         return view('backend.role.form',compact('modules'));
     }
@@ -43,7 +43,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        Gate::authorize('app.roles.create');
+        Gate::authorize('app.access_control.role');
         // return $request;
 
         $request->validate([
@@ -79,7 +79,7 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        Gate::authorize('app.roles.edit');
+        Gate::authorize('app.access_control.role');
         $role= Role::find($id);
         $modules= Module::all();
         return view('backend.role.form',compact('modules','role'));
@@ -94,7 +94,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Gate::authorize('app.roles.edit');
+        Gate::authorize('app.access_control.role');
         $request->validate([
             'role_name'     => 'required',
             'permissions'   => 'required|array',
@@ -120,7 +120,7 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        Gate::authorize('app.roles.destroy');
+        Gate::authorize('app.access_control.role');
         //
     }
 }

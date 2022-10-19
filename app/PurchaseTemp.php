@@ -18,4 +18,7 @@ class PurchaseTemp extends Model
     public function payTerm(){
         return $this->belongsTo(PayTerm::class, 'pay_term');
     }
+    public function prInfo(){
+        return $this->belongsTo(PurchaseRequisition::class, 'pr_id');
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\backend;
 use App\Http\Controllers\Controller;
 use App\Mapping;
 use App\Models\AccountHead;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Laravel\Ui\Presets\React;
 
@@ -17,6 +18,7 @@ class MappingController extends Controller
      */
     public function index()
     {
+        Gate::authorize('app.mapping.index');
         $mapping = Mapping::orderBy('id', 'desc')->paginate(15);
         $accoutHeads = AccountHead::all();
         return view('backend.mapping.index', compact('mapping', 'accoutHeads'));

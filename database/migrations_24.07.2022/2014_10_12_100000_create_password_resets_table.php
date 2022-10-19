@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOpeningStocksTable extends Migration
+class CreatePasswordResetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateOpeningStocksTable extends Migration
      */
     public function up()
     {
-        Schema::create('opening_stocks', function (Blueprint $table) {
-            $table->id();
-            $table->date('date');
-            $table->integer('item_id');
-            $table->integer('quantity');
-            $table->timestamps();
+        Schema::create('password_resets', function (Blueprint $table) {
+            $table->string('email')->index();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
         });
     }
 
@@ -29,6 +27,6 @@ class CreateOpeningStocksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('opening_stocks');
+        Schema::dropIfExists('password_resets');
     }
 }

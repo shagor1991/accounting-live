@@ -12,7 +12,7 @@ class UnitTableSeeder extends Seeder
      */
     public function run()
     {
-        $units = array('Bottle', 'Box', 'FT', 'GM', 'KG', 'LBS', 'Litre', 'Meter', 'ML', 'Packets', 'PCS');
+        $units = array('Box', 'Packets', 'PCS', 'Dozen');
         foreach($units as $unit){
             Unit::create(['name' => $unit]);
         }

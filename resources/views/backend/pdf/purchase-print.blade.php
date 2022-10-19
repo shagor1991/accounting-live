@@ -11,7 +11,7 @@ $company_email= \App\Setting::where('config_name', 'company_email')->first();
             <div class="col-md-12">
                 <section id="widgets-Statistics">
                     <div class="row">
-                        <div class="col-12 text-center">
+                        {{-- <div class="col-12 text-center">
                             <h1>{{ $company_name->config_value }}</h1>
                             <h6>{{ $company_address->config_value }}</h6>
                             <div class="row">
@@ -19,13 +19,13 @@ $company_email= \App\Setting::where('config_name', 'company_email')->first();
                                     <h6>Mobile {{ $company_tele->config_value }}</h6>
                                 </div>
                                 <div class="col-6 text-left">
-                                    <h6>TRN 100305813600003</h6>
+                                    <h6>TRN: </h6>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="col-12 text-center pt-3">
-                            <h1>Purchase Invoice</h1>
+                            <h1>Purchase Order</h1>
                         </div>
                     </div>
 
@@ -35,7 +35,7 @@ $company_email= \App\Setting::where('config_name', 'company_email')->first();
                                 <div class="col-12">
                                     <div class="row">
                                         <div class="col-6">
-                                            <p><strong>Purchase No:</strong></p>
+                                            <p><strong>Purchase Order No:</strong></p>
                                         </div>
                                         <div class="col-6">
                                             <p>{{$purchase_info->purchase_no}}</p>
@@ -124,16 +124,18 @@ $company_email= \App\Setting::where('config_name', 'company_email')->first();
                         <table class="table table-borderless">
                             <thead>
                                 <tr>
+                                    <th>Barcode</th>
                                     <th scope="col">Item Name</th>
-                                    <th scope="col">Brand</th>
+                                    <th scope="col">Color</th>
                                     <th scope="col">Pur. Rate</th>
-                                    <th scope="col">Q'ty</th>
+                                    <th scope="col">Qty</th>
                                     <th scope="col">Amount</th>
                                 </tr>
                             </thead>
                             <tbody id="tempLists">
                                 @foreach ($purchase_items as $item)
                                 <tr  style="line-height: 0;">
+                                    <td>{{$item->itemName->barcode}}</td>
                                     <td>{{$item->itemName->item_name}}</td>
                                     <td>{{$item->brandName->name}}</td>
                                     <td>{{$item->purchase_rate}}</td>
@@ -142,7 +144,7 @@ $company_email= \App\Setting::where('config_name', 'company_email')->first();
                                 </tr>
                                 @endforeach
                                 <tr class="border-top" style="line-height: 0;">
-                                    <td colspan="4"  class="text-right">Net Amount: </td>
+                                    <td colspan="4" class="text-right">Net Amount: </td>
                                     <td colspan="2">
                                         {{ $purchase_items->sum('total_amount') - $purchase_items->sum('vat_amount')}}
                                     </td>
@@ -163,32 +165,29 @@ $company_email= \App\Setting::where('config_name', 'company_email')->first();
                         </table>
                     </div>
 
-                    <div class="row pt-5 mt-5">
-
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="col-12">
-                                    <h4>RECEIVED BY</h4>
-                                </div>
-
-                                <div class="col-12 pt-5">
-                                    <h4>SIGNATURE</h4>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <div class="row">
-                                <div class="col-12 text-right">
-                                    <h4>FOR {{ $company_name->config_value }}</h4>
-                                </div>
-
-                                <div class="col-12 pt-5 text-right">
-                                    <h4>AUTHOROZED SIGNATORY</h4>
+                    <div class="row mt-5 pt-5">
+                        <div class="col-12">
+                            <div class="mt-5">
+                                <div class="d-flex text-center" style="justify-content: space-between">
+                                    <div>
+                                        <h6>Prepared By:</h5>
+                                        <h5>Mahidul Islam Bappi</h5>
+                                    </div>
+                                    <div>
+                                        <h5>Endorsed By:</h5>
+                                        <h5>Mohammad Habibur Rahman</h5>
+                                    </div>
+                                    <div>
+                                        <h5>Authorized By:</h5>
+                                        <h5>Md. Akhter Hossain</h5>
+                                    </div>
+                                    <div>
+                                        <h5>Approved By:</h5>
+                                        <h5>Salim Osman</h5>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </section>
             </div>

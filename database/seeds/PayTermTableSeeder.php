@@ -1,6 +1,6 @@
 <?php
 
-use App\Payterm;
+use App\PayTerm;
 use Illuminate\Database\Seeder;
 
 class PayTermTableSeeder extends Seeder

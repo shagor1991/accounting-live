@@ -80,7 +80,7 @@ class BrandController extends Controller
     {
         $brand_info = Brand::find($id);
         $countries = Country::all();
-        $brands = Brand::paginate(15);
+        $brands = Brand::orderBy('id', 'asc')->paginate(15);
         return view('backend.brand.edit', compact('brands', 'brand_info', 'countries'));
     }
 

@@ -100,7 +100,7 @@
                                                             class="form-control" readonly>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label for="">Pay Mode</label>
+                                                        <label for="">Payment Mode</label>
                                                         <select name="pay_mode" id="" class="form-control" required>
                                                             <option value="">Select...</option>
                                                             @foreach ($modes as $item)
@@ -110,7 +110,7 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-sm-3 form-group">
-                                                        <label for="">Pay Terms</label>
+                                                        <label for="">Payment Terms</label>
                                                         <select name="pay_terms" id="pay_terms" class="form-control"
                                                             required>
                                                             <option value="">Select...</option>

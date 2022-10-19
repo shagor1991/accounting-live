@@ -15,6 +15,8 @@ class CreateMasterAccountsTable extends Migration
     {
         Schema::create('master_accounts', function (Blueprint $table) {
             $table->id();
+            $table->boolean('reserved');
+            $table->integer('category_id');
             $table->integer('mst_ac_code')->unique();
             $table->string('mst_ac_head');
             $table->string('mst_definition');

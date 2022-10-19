@@ -13,11 +13,11 @@
                  </div>
              </div>
 
-                 <div class="row">
+                 <div class="row ">
                         <table id="customers">
                             <tr>
-                                <th>Code</th>
-                                <th>Party Info Name</th>
+                                <th>Party Code</th>
+                                <th>Party Name</th>
                                 <th>Type</th>
                                 <th>TRN Number</th>
                                 <th>Contact Person</th>
@@ -29,16 +29,15 @@
 
                             @foreach ($partyInfos as $pInfo)
                             <tr>
-                                <td>{{ $pInfo->cc_code }}</td>
-                                <td>{{ $pInfo->cc_name }}</td>
-                                <td>{{ $pInfo->cc_type }}</td>
+                                <td>{{ $pInfo->pi_code }}</td>
+                                <td>{{ $pInfo->pi_name }}</td>
+                                <td>{{ $pInfo->pi_type }}</td>
                                 <td>{{ $pInfo->trn_no }}</td>
                                 <td>{{ $pInfo->con_person }}</td>
                                 <td>{{ $pInfo->con_no }}</td>
                                 <td>{{ $pInfo->phone_no }}</td>
                                 <td>{{ $pInfo->address }}</td>
                                 <td>{{ $pInfo->email }}</td>
-
 
                             </tr>
                         @endforeach

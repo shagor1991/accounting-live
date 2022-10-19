@@ -10,8 +10,18 @@ class BankController extends Controller
 {
     public function bankDetails()
     {
+        $latest = BankDetail::withTrashed()->latest()->first();
+
+        if($latest)
+        {
+            $cc=$latest->bank_code+1;
+        }
+        else
+        {
+            $cc=100;
+        }
         $bankDetails=BankDetail::latest()->paginate(25);
-        return view('backend.bank.bankDetails',compact('bankDetails'));
+        return view('backend.bank.bankDetails',compact('bankDetails','cc'));
     }
 
     public function bankDetailsPost(Request $request)
@@ -123,7 +133,7 @@ class BankController extends Controller
         {
             return back()->with('error', "Not Found");
         }
-       $bank->delete();
+       $bank->forceDelete();
        return redirect()->route('bankDetails')->with('success', "Deleted Successfully");
     }
 

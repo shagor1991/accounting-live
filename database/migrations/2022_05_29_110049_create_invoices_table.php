@@ -16,16 +16,19 @@ class CreateInvoicesTable extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_no')->unique();
+            $table->string('sale_order_id')->nullable();
+            $table->string('delivery_note_id')->nullable();
             $table->date('date');
             $table->string('customer_name');
-
-            $table->string('branch');
-            $table->string('trn_no');
+            $table->string('gl_code')->nullable();
+            $table->string('project_id');
+            $table->string('trn_no')->nullable();
             $table->string('pay_mode');
             $table->string('pay_terms');
             $table->string('due_date');
-            $table->string('contact_no');
-            $table->string('address');
+            $table->string('contact_no')->nullable();
+            $table->string('address')->nullable();
+            $table->string('invoice_from');
             $table->softDeletes();
 
             $table->timestamps();

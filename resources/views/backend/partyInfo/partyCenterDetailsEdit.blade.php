@@ -60,10 +60,10 @@
                                                                 </div>
 
                                                                 <div class="col-md-4">
-                                                                    <label>CosT Type</label>
+                                                                    <label>Party Type</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
-                                                                    <select name="pi_type" class="form-control" id=""
+                                                                    <select name="pi_type" class="common-select2" style="width: 100% !important" id=""
                                                                         required>
                                                                         <option value="">Select...</option>
                                                                         @foreach ($costTypes as $item)
@@ -81,13 +81,13 @@
 
 
                                                                 <div class="col-md-4">
-                                                                    <label>TRN</label>
+                                                                    <label>TRN No</label>
                                                                 </div>
                                                                 <div class="col-md-8 form-group">
                                                                     <input type="text" id="trn_no" class="form-control"
                                                                         name="trn_no"
                                                                         value="{{ isset($partyInfo) ? $partyInfo->trn_no : '' }}"
-                                                                        placeholder="TRN Number" required>
+                                                                        placeholder="TRN Number" >
 
 
                                                                     @error('trn_no')
@@ -214,11 +214,11 @@
                         <div class="col-md-6 text-right">
                             <a href="{{ route('pdf', $id = 'partyCenter') }}" class="btn btn-xs btn-info float-right"
                                 target="_blank">Print</a>
-                            <button class="btn btn-xs btn-info float-right"
+                            <button class="btn btn-xs btn-info float-right mr-1"
                                 onclick="exportTableToCSV('PartyInfos.csv')">Export To CSV</button>
                         </div>
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table table-sm table-bordered">
                                 <thead class="thead-light">
                                     <tr>
                                         <th>Code</th>

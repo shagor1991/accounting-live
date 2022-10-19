@@ -119,7 +119,14 @@ class ProfitCenterController extends Controller
             return back()->with('error', "Not Found");
 
         }
-        $profitCenter->delete();
+        $count=$profitCenter->projects($profitCenter->pc_code)->count();
+        // dd($count);
+        if($count>0)
+        {
+            return back()->with('error', "It has Branch");
+
+        }
+        $profitCenter->forceDelete();
         return redirect()->route('profitCenterDetails')->with('success', "Deleted Successfully");
     }
 

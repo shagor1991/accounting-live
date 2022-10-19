@@ -16,17 +16,45 @@
                         <div class="col-md-6">
                             <h4>Master Account Form</h4>
                         </div>
-                        <div class="col-md-6 text-right">
+                        <div class="col-md-6 text-right d-none">
                             <a href="{{ route('mstAccType') }}" class="btn btn-info">Manage Master Account Type</a>
                         </div>
                     </div>
                   <div class="row">
                       <div class="col-12">
+                        @isset($masterAcc)
+                        <form action="{{ route('masterDetailsUpdate', $masterAcc) }}" method="POST">
+
+                        @else
+                        <form action="{{ route('masterDetailsPost') }}" method="POST">
+
+                        @endisset
+                            @csrf
                           <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Master Account Details</h4>
-                            </div>
+
+
                               <div class="card-body">
+                                <div class="row pb-1 d-flex align-items-center">
+                                    <div class="col-md-3 d-flex align-items-center">
+                                        <h4 class="card-title">Master Account Details</h4>
+
+                                    </div>
+                                    <div class="col-md-3">
+
+                                            <select name="category" class="common-select2" style="width: 100% !important" id="category" {{ isset($masterAcc)?'disabled readonly':'' }} >
+                                                <option value="">Select Category...</option>
+                                                @foreach ($categories as $item)
+                                                <option value="{{ $item->id }}" >{{ $item->title }}</option>
+
+                                                @endforeach
+
+                                            </select>
+                                            @error('category')
+                                            <div class="btn btn-sm btn-danger">{{ $message }}</div>
+                                        @enderror
+
+                                    </div>
+                                </div>
                                 @isset($masterAcc)
                                 <form action="{{ route('masterDetailsUpdate', $masterAcc) }}" method="POST">
 
@@ -74,7 +102,7 @@
                                                                 <label>Definition</label>
                                                             </div>
                                                             <div class="col-md-8 form-group">
-                                                                <select name="mst_definition" class="form-control" id="" required>
+                                                                <select name="mst_definition" class="common-select2" style="width: 100% !important" id="" required>
                                                                     <option value="">Select...</option>
                                                                     @foreach ($mst_definitions as $item)
                                                                     <option value="{{ $item->title }}" {{ isset($masterAcc)?($masterAcc->mst_definition==$item->title?"selected":""):"" }}>{{ $item->title }}</option>
@@ -92,14 +120,15 @@
                                     <div class="col-md-6">
                                                     <div class="form-body">
                                                         <div class="row">
+
                                                             <div class="col-md-4">
                                                                 <label>Master A/C Type</label>
                                                             </div>
                                                             <div class="col-md-8 form-group ">
-                                                                <select name="mst_ac_type" class="form-control" id="mst_ac_type" {{ isset($masterAcc)? "disabled readonly":"required"}} >
+                                                                <select name="mst_ac_type" class="common-select2" style="width: 100% !important" id="mst_ac_type" {{ isset($masterAcc)? "disabled readonly":"required"}} >
                                                                     <option value="">Select...</option>
                                                                     @foreach ($mstAccType as $item)
-                                                                    <option value="{{ $item->id }}" {{ isset($masterAcc)?($masterAcc->mst_ac_type==$item->id?"selected":""):"" }}>{{ $item->title }}</option>
+                                                                    <option value="{{ $item->title }}" {{ isset($masterAcc)?($masterAcc->mst_ac_type==$item->title?"selected":""):"" }}>{{ $item->title }}</option>
 
                                                                     @endforeach
 
@@ -112,7 +141,7 @@
                                                                 <label>VAT Type</label>
                                                             </div>
                                                             <div class="col-md-8 form-group">
-                                                                    <select name="vat_type" id="vat_type" class="form-control" required>
+                                                                    <select name="vat_type" id="vat_type" class="common-select2" style="width: 100% !important" required>
                                                                         <option value="">Select..</option>
                                                                         @foreach ($vat_types as $item)
                                                                         <option value="{{ $item->title }}" {{ isset($masterAcc)?($masterAcc->vat_type==$item->title?"selected":""):"" }}>{{ $item->title }}</option>
@@ -138,6 +167,7 @@
                                     </div>
 
                                 </div>
+
                             </form>
 
                               </div>
@@ -160,11 +190,11 @@
                     </div>
                     <div class="col-md-6 text-right">
                         <a href="{{ route('pdf',$id="MasterAccDetails") }}" class="btn btn-xs btn-info float-right" target="_blank">Print</a>
-                        <button class="btn btn-xs btn-info float-right"
+                        <button class="btn btn-xs btn-info float-right mr-1"
                     onclick="exportTableToCSV('MasterAccountsdetails.csv')">Export To CSV</button>
                     </div>
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table table-sm table-bordered">
                             <thead class="thead-light">
                             <tr>
                                 <th>Master A/C Code</th>
@@ -182,7 +212,7 @@
                                     <td>{{ $masterAcc->mst_ac_code }}</td>
                                     <td>{{ $masterAcc->mst_ac_head }}</td>
                                     <td>{{ $masterAcc->mst_definition }}</td>
-                                    <td>{{ $masterAcc->accType->title }}</td>
+                                    <td>{{ $masterAcc->mst_ac_type }}</td>
                                     <td>{{ $masterAcc->vat_type }}</td>
 
                                     <td style="white-space: nowrap">
@@ -222,7 +252,7 @@
     {{-- <script src="{{ asset('assets/backend/app-assets/vendors/js/jquery/jquery.min.js') }}"></script> --}}
     <script>
         $(document).ready(function() {
-            $('#mst_ac_type').change(function() {
+            $('#category').change(function() {
                 // alert(1);
                 if ($(this).val() != '') {
                     var value = $(this).val();

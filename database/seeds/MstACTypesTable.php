@@ -12,8 +12,12 @@ class MstACTypesTable extends Seeder
      */
     public function run()
     {
+
         MstACType::create([
-            'title'=>'REVENUE INCOME',
+            'title'=>'ASSET',
+        ]);
+        MstACType::create([
+            'title'=>'LIABILITY',
         ]);
 
         MstACType::create([
@@ -21,20 +25,30 @@ class MstACTypesTable extends Seeder
         ]);
 
         MstACType::create([
+            'title'=>'REVENUE INCOME',
+        ]);
+
+
+
+        MstACType::create([
             'title'=>'CAPITAL EXPENSE',
         ]);
 
-        MstACType::create([
-            'title'=>'ASSET',
-        ]);
+
 
         MstACType::create([
             'title'=>'REVENUE EXPENSE',
         ]);
 
         MstACType::create([
-            'title'=>'LIABILITY',
+            'title'=>'CAPITAL RESERVE',
         ]);
+
+        MstACType::create([
+            'title'=>'RESERVE',
+        ]);
+
+
 
     }
 }

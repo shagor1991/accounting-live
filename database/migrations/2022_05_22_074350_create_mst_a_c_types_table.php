@@ -17,7 +17,7 @@ class CreateMstACTypesTable extends Migration
         Schema::create('mst_a_c_types', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->integer('cat_type');
+            // $table->integer('cat_type');
             $table->timestamps();
         });
     }

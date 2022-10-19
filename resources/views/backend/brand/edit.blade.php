@@ -3,6 +3,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.0/css/toastr.css" rel="stylesheet" />
 
 @endpush
+@section('title', 'color edit')
 @section('content')
     <!-- BEGIN: Content-->
     <div class="app-content content">
@@ -15,20 +16,20 @@
                   <div class="row">
                       <div class="col-12">
                           <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Brand Edit Information</h4>
+                            <div class="card-header content-title">
+                                <h4>Color Edit Information</h4>
                             </div>
-                              <div class="card-body">
+                              <div class="card-body content-padding">
                                 <form action="{{ route('brand.update',$brand_info->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PATCH')
                                     <div class="row match-height">
                                         <div class="col-md-6">
-                                            <label for="">Brand ID</label>
+                                            <label for="">Color ID</label>
                                             <input type="text" name="brand_id" class="form-control" value="{{$brand_info->brand_id}}" readonly>
                                         </div>
                                         <div class="col-md-6">
-                                            <label for="">Brand Name</label>
+                                            <label for="">Color</label>
                                             <input type="text" name="name" class="form-control" value="{{$brand_info->name}}">
                                         </div>
                                         <div class="col-md-6">
@@ -40,14 +41,56 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-12 d-flex justify-content-end mt-1">
-                                            <button type="submit" class="btn btn-primary mr-1">Update</button>
-                                            <button type="reset" class="btn mr-1" id="reset">Reset</button>
+                                        <div class="col-6 d-flex justify-content-end mt-1">
+                                            <button type="submit" class="btn btn-primary btn-sm mr-1">Update</button>
+                                            <button type="reset" class="btn mr-1 btn-sm" id="reset">Reset</button>
                                         </div>
                                     </div>
                                 </form>
                               </div>
                           </div>
+                      </div>
+                  </div>
+                  <div class="table-responsive card">
+                      <table class="table table-sm table-bordered">
+                          <thead class="user-table-body">
+                          <tr>
+                              <th>Color ID</th>
+                              <th>Color</th>
+                              <th>Origin</th>
+                              <th>Action</th>
+                          </tr>
+                          </thead>
+  
+                          <tbody class="user-table-body">
+                              @foreach ($brands as $brand)
+                              <tr  class="data-row">
+                                  <td>{{ $brand->brand_id }}</td>
+                                  <td>{{ $brand->name }}</td>
+                                  <td>{{ $brand->origin }}</td>
+  
+                                  <td style="white-space: nowrap">
+                                      <a href="{{route('brand.edit', $brand->id)}}" class="btn btn-sm btn-warning"><i class="bx bx-edit"></i></a>                                    
+                                      <a href="">
+                                          <form action="{{ route('brand.destroy', $brand->id) }}" method="POST">
+                                              @csrf
+                                              @method('DELETE')
+                                              <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Confirm?')" ><i class="bx bx-trash"></i></button>
+                                          </form>
+                                      </a>
+                                  </td>
+                              </tr>
+  
+                              @endforeach
+                          </tbody>
+  
+  
+                      </table>
+  
+                  </div>
+                  <div class="row">
+                      <div class="col-12 text-right">
+                          {{$brands->links()}}
                       </div>
                   </div>
                 </section>

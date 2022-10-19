@@ -19,5 +19,9 @@ class VatTypeTable extends Seeder
         VatType::create([
             'title'=>'Output',
         ]);
+
+        VatType::create([
+            'title'=>'N/A',
+        ]);
     }
 }

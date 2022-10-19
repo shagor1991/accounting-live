@@ -66,6 +66,25 @@
   text-align: left;
   background-color: #04AA6D;
   color: white;
+  text-transform: uppercase;
+
+}
+.graph-7{background: url(../img/graphs/graph-7.jpg) no-repeat;}
+.graph-image img{display: none;}
+@media screen {
+  div.divFooter {
+    display: none;
+  }
+}
+@media print {
+  div.divFooter {
+    position: fixed;
+    bottom: 0;
+  }
+}
+th{
+    text-transform: uppercase;
+
 }
     </style>
 
@@ -73,19 +92,54 @@
 <!-- END: Head-->
 
 <!-- BEGIN: Body-->
+@php
+$company_name= \App\Setting::where('config_name', 'company_name')->first();
+$company_address= \App\Setting::where('config_name', 'company_address')->first();
+$company_tele= \App\Setting::where('config_name', 'company_tele')->first();
+$company_email= \App\Setting::where('config_name', 'company_email')->first();
+$trn_no= \App\Setting::where('config_name', 'trn_no')->first();
 
+@endphp
 <body onload="window.print();">
+    <div class="content-wrapper">
+            <div class="content-body">
+                <section id="widgets-Statistics">
+                    <div class="container pt-2">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <img src="{{ asset('img/finallogo.jpeg') }}"  style="height: 100px" alt="">
 
-    <!-- BEGIN: Header-->
+                            </div>
+                            <div class="col-md-10 text-center">
+                                <h2>{{ $company_name->config_value }}</h2>
+                                <h6>{{ $company_address->config_value }}</h6>
+                                <div class="row">
+                                    <div class="col-6 text-right">
+                                        <h6>Mobile {{ $company_tele->config_value }}</h6>
+                                    </div>
+                                    <div class="col-6 text-left">
+                                        <h6>TRN {{ $trn_no->config_value }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
 
-
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+    </div>
     @yield('content')
+    {{-- <div class="divFooter">
+        Business Software Solutions by
+        <span><img src="{{ asset('img/zisprink.png') }}" style="max-height: 90px" class="img-fluid" alt=""></span>
+    </div> --}}
+    <div class="img">
+        <img src="{{ asset('img/finallogo.jpeg') }}" class="img-fluid" style="position: fixed; top:350px; left:270px; opacity:0.1; " alt="">
 
-
-
-
-
-
+        {{-- <img src="{{ asset('img/finallogo.jpeg') }}" class="img-fluid" style="position: fixed; top:100px; left:0px; opacity:0.1;width:100%; " alt=""> --}}
+    </div>
     <!-- BEGIN: Vendor JS-->
     <script src="{{ asset('assets/backend')}}/app-assets/vendors/js/vendors.min.js"></script>
     <script src="{{ asset('assets/backend')}}/app-assets/fonts/LivIconsEvo/js/LivIconsEvo.tools.js"></script>

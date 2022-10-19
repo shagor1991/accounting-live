@@ -11,9 +11,33 @@ class PartyInfoController extends Controller
 {
     public function partyInfoDetails()
     {
+        $latest = PartyInfo::withTrashed()->orderBy('id','DESC')->first();
+
+        if ($latest) {
+            $pi_code=preg_replace('/^PI-/', '', $latest->pi_code );
+            ++$pi_code;
+        } else {
+            $pi_code = 1;
+        }
+        if($pi_code<10)
+        {
+            $cc="PI-000".$pi_code;
+        }
+        elseif($pi_code<100)
+        {
+            $cc="PI-00".$pi_code;
+        }
+        elseif($pi_code<1000)
+        {
+            $cc="PI-0".$pi_code;
+        }
+        else
+        {
+            $cc="PI-".$pi_code;
+        }
         $costTypes=CostCenterType::get();
-        $partyInfos = PartyInfo::where('pi_type','!=', "Draft")->latest()->paginate(25);
-        return view('backend.partyInfo.partyCenterDetails', compact('partyInfos','costTypes'));
+        $partyInfos = PartyInfo::where('pi_type','!=', "Draft")->orderBy('id','DESC')->paginate(25);
+        return view('backend.partyInfo.partyCenterDetails', compact('partyInfos','costTypes','cc'));
     }
 
     public function partyInfoPost(Request $request)
@@ -21,17 +45,15 @@ class PartyInfoController extends Controller
         $request->validate([
             'pi_name' => 'required',
             'pi_type'        => 'required',
-            'trn_no'        => 'required',
 
         ],
         [
             'pi_name.required' => 'Cost Center is required',
             'pi_type.required' => 'Type is required',
-            'trn_no.required' => 'TRN No is required',
         ]
     );
 
-            $latest = PartyInfo::withTrashed()->latest()->first();
+            $latest = PartyInfo::withTrashed()->orderBy('id','DESC')->first();
 
             if ($latest) {
                 $pi_code=preg_replace('/^PI-/', '', $latest->pi_code );
@@ -82,7 +104,7 @@ class PartyInfoController extends Controller
         }
         $costTypes=CostCenterType::get();
 
-        $partyInfos = PartyInfo::where('pi_type','!=', "Draft")->latest()->paginate(25);
+        $partyInfos = PartyInfo::where('pi_type','!=', "Draft")->orderBy('id','DESC')->paginate(25);
         return view('backend.partyInfo.partyCenterDetailsEdit', compact('partyInfos', 'partyInfo','costTypes'));
     }
 
@@ -91,13 +113,11 @@ class PartyInfoController extends Controller
         $request->validate([
             'pi_name' => 'required',
             'pi_type'        => 'required',
-            'trn_no'        => 'required',
 
         ],
         [
             'pi_name.required' => 'Cost Center is required',
             'pi_type.required' => 'Type is required',
-            'trn_no.required' => 'TRN No is required',
         ]
     );
 
@@ -129,6 +149,11 @@ class PartyInfoController extends Controller
             return back()->with('error', "Not Found");
 
         }
+
+        if($partyInfo->journals()->count()>0)
+        {
+            return back()->with('error','It has journals entry');
+        }
         $partyInfo->forceDelete();
         return redirect()->route('partyInfoDetails')->with('success', "Deleted Successfully");
     }
@@ -137,7 +162,7 @@ class PartyInfoController extends Controller
 
     public function partyInfoForm(Request $request)
     {
-        $latest = PartyInfo::withTrashed()->latest()->first();
+        $latest = PartyInfo::withTrashed()->orderBy('id','DESC')->first();
 
         if ($latest) {
             $pi_code=preg_replace('/^PI-/', '', $latest->pi_code );
@@ -167,6 +192,17 @@ class PartyInfoController extends Controller
         if ($request->ajax()) {
             return Response()->json(['page' => view('backend.ajax.form.partyInfoForm', ['cc' => $c_code,'costTypes' => $costTypes,])->render()]);
         }
+    }
+
+    public function partyView($pInfo)
+    {
+        $pInfo=PartyInfo::find($pInfo);
+        if(!$pInfo)
+        {
+            return back()->with('error', "Not Found");
+        }
+        return view('backend.partyInfo.partyCenterView', compact('pInfo'));
+
     }
 
 }
