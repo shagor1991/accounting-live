@@ -4,8 +4,6 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use App\Invoice;
-use App\Journal;
-use App\JournalRecord;
 use App\JournalRecordsTemp;
 use App\JournalTemp;
 use App\Models\AccountHead;
@@ -17,6 +15,7 @@ use App\ReceiptVoucherDetailTemp;
 use App\ReceiptVoucherTemp;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\PDF;
 
 class NewReceiptVoucher extends Controller
 {
@@ -111,7 +110,7 @@ class NewReceiptVoucher extends Controller
 
         $sub_invoice = Carbon::now()->format('Ymd');
 
-        $latest_journal_no = Journal::withTrashed()->whereDate('created_at', Carbon::today())->where('journal_no', 'LIKE', "%{$sub_invoice}%")->latest()->first();
+        $latest_journal_no = JournalTemp::withTrashed()->whereDate('created_at', Carbon::today())->where('journal_no', 'LIKE', "%{$sub_invoice}%")->latest()->first();
         
         if ($latest_journal_no) {
             $journal_no = substr($latest_journal_no->journal_no,0,-1);
@@ -120,7 +119,7 @@ class NewReceiptVoucher extends Controller
         } else {
             $journal_no = Carbon::now()->format('Ymd') . '001' . "J";
         }
-        $journal= new Journal();
+        $journal= new JournalTemp();
         $journal->project_id        = $request->project;
         $journal->journal_no        = $journal_no;
         $journal->date              = $request->date;
@@ -129,10 +128,8 @@ class NewReceiptVoucher extends Controller
         $journal->party_info_id     = $request->party_info;
         $journal->account_head_id   = 0;
         $journal->amount            = $journal_amount;
-        $journal->pay_mode          = $request->pay_mode;
         $journal->tax_rate          = 0;
         $journal->vat_amount        = 0;
-        $journal->voucher_type      = 'journal';
         $journal->total_amount      = $journal_amount;
         $journal->narration         = $request->remark;
         $journal->save();
@@ -143,8 +140,8 @@ class NewReceiptVoucher extends Controller
             $ac_head_dr= AccountHead::find(63); // HSBC Bank
         }
 
-        $jl_record= new JournalRecord();
-        $jl_record->journal_id     = $journal->id;
+        $jl_record= new JournalRecordsTemp();
+        $jl_record->journal_temp_id     = $journal->id;
         $jl_record->project_details_id  = $request->project;
         $jl_record->cost_center_id      = $request->cost_center_name;
         $jl_record->party_info_id       = $request->party_info;
@@ -157,8 +154,8 @@ class NewReceiptVoucher extends Controller
         $jl_record->journal_date        = $request->date;
         $jl_record->save();
 
-        $jl_record= new JournalRecord();
-        $jl_record->journal_id     = $journal->id;
+        $jl_record= new JournalRecordsTemp();
+        $jl_record->journal_temp_id     = $journal->id;
         $jl_record->project_details_id  = $request->project;
         $jl_record->cost_center_id      = $request->cost_center_name;
         $jl_record->party_info_id       = $request->party_info;
@@ -239,6 +236,29 @@ class NewReceiptVoucher extends Controller
         return $result;
     }
 
-    
-
+    // work by mominul
+    public function new_receipt_voucher(Request $request){
+        $projects = ProjectDetail::all();
+        $cCenters = CostCenter::all();
+        $pInfos = PartyInfo::all();
+        $modes = PayMode::all();
+        $invoices= Invoice::where('pay_mode', 'Credit')->get();
+        return view('backend.new-receipt-voucher.new-create', compact('projects', 'cCenters', 'pInfos','modes','invoices'));
+    }
+    public function receipt_voucher_list(Request $request){
+        $receipt_vouchers= ReceiptVoucherTemp::all();
+        return view('backend.new-receipt-voucher.receipt-voucher-list', compact('receipt_vouchers'));
+    }
+    public function receipt_voucher_details_modal(Request $request){
+        $receipt_voucher= ReceiptVoucherTemp::find($request->id);
+        $words= $this->convert_number($receipt_voucher->amount);
+        return view('backend.new-receipt-voucher.receipt-voucher-preview', compact('receipt_voucher','words'));
+    }
+    public function receipt_voucher_view_pdf($id){
+        $receipt_voucher= ReceiptVoucherTemp::find($id);
+        $words= $this->convert_number($receipt_voucher->amount);
+        $pdf = PDF::loadView('backend.new-receipt-voucher.receipt-voucher-pdf', compact('receipt_voucher', 'words'));
+        return $pdf->download('recept-voucher.pdf');
+        // return view('backend.new-receipt-voucher.receipt-voucher-pdf', compact('receipt_voucher','words'));
+    }
 }

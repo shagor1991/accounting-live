@@ -96,6 +96,12 @@
 
 
         /* Tareq custom css */
+        /* work by mominul */
+        @media print{
+            .print-hidden{
+                display: none;
+            }
+        }
     </style>
 </head>
 <!-- END: Head-->

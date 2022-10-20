@@ -65,4 +65,9 @@ class Journal extends Model
         return $count;
 
     }
+
+    // work by mominul
+    public function voucher_type(){
+        return $this->hasOne(DebitCreditVoucher::class,'journal_id');
+    }
 }

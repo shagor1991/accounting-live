@@ -14,10 +14,16 @@ class DocumentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $documents= AccountsDocument::all();
-        return view('backend.accounts-document.index', compact('documents'));
+        $search_value = '';
+        $documents= AccountsDocument::orderBy('id', 'desc');
+        if($request->document_name){
+            $search_value = $request->document_name;
+            $documents= $documents->where('name','LIKE', "%$request->document_name%");
+        }
+        $documents = $documents->get();
+        return view('backend.accounts-document.index', compact('documents', 'search_value'));
     }
 
     /**

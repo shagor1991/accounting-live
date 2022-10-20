@@ -239,7 +239,7 @@ $logo= \App\Setting::where('config_name', 'company_logo')->first();
 
                     <div class="row pt-3">
                         <div class="col-md-1">
-                            <img src="{{ asset('storage/upload/settings/'.$logo->config_value)}}"  style="height: 100px" alt="Company Logo">
+                            <img src="{{ asset('assets/backend/app-assets/settings/'.$logo->config_value)}}"  style="height: 100px" alt="Company Logo">
 
                         </div>
                         <div class="col-md-10 text-center">

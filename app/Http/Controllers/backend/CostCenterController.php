@@ -37,8 +37,9 @@ class CostCenterController extends Controller
             $cc="CC-".$cc_code;
         }
         $costCenterDetails = CostCenter::where('activity', '!=', 'Draft')->latest()->paginate(25);
+        $costCenterDetailsPDF = CostCenter::where('activity', '!=', 'Draft')->latest()->get();
         $projects=ProjectDetail::all();
-        return view('backend.costCenter.costCenterDetails', compact('costCenterDetails','projects','cc'));
+        return view('backend.costCenter.costCenterDetails', compact('costCenterDetails','projects','cc', 'costCenterDetailsPDF'));
     }
 
     public function costCenterPost(Request $request)
@@ -55,7 +56,7 @@ class CostCenterController extends Controller
             'prsn_responsible.required' => 'Person responsible is required',
             'project_id' => 'Select Project'
         ]
-    );
+        );
         $latest = CostCenter::withTrashed()->latest()->first();
         if ($latest) {
             $cc_code=preg_replace('/^CC-/', '', $latest->cc_code );
@@ -86,7 +87,8 @@ class CostCenterController extends Controller
         $draftProfit->prsn_responsible = $request->prsn_responsible;
         $draftProfit->project_id = $request->project_id;
         $sv=$draftProfit->save();
-        return redirect()->route('costCenterDetails')->with('success', 'Added Successfully');
+        return back()->with('success', 'Added Successfully');
+        // return redirect()->route('costCenterDetails')->with('success', 'Added Successfully');
     }
 
 
@@ -143,7 +145,8 @@ class CostCenterController extends Controller
                 return back()->with('error','It has journals entry');
             }
         $costCenter->forceDelete();
-        return redirect()->route('costCenterDetails')->with('success', "Deleted Successfully");
+        return back()->with('success', "Deleted Successfully");
+        // return redirect()->route('costCenterDetails')->with('success', "Deleted Successfully");
     }
 
     public function costCenterForm(Request $request)

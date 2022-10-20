@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use SebastianBergmann\CodeCoverage\Report\Xml\Project;
+use Barryvdh\DomPDF\Facade\PDF;
 
 class JournalEntryController extends Controller
 {
@@ -729,7 +730,7 @@ class JournalEntryController extends Controller
 
         // vat entry to journal
         if($total_vat>0){
-            $vat_ac_head= AccountHead::find(224);
+            $vat_ac_head= AccountHead::find(223); // Vat account
             $jl_record= new JournalRecordsTemp();
             $jl_record->journal_temp_id     = $journal->id;
             $jl_record->project_details_id  = $request->project;
@@ -747,7 +748,7 @@ class JournalEntryController extends Controller
 
         // Opposit entry of journal
         if($request->pay_mode=='Cash' || $request->pay_mode=='Card'){
-            $ac_head= AccountHead::find(219);
+            $ac_head= AccountHead::find(219); // Cash Account
             $opposit_type= $type=='DR' ? 'CR' : 'DR';
             $jl_record= new JournalRecordsTemp();
             $jl_record->journal_temp_id     = $journal->id;
@@ -946,7 +947,8 @@ class JournalEntryController extends Controller
             return back()->with('error', "Not Found");
         }
         $journal->forceDelete();
-        return redirect()->route('journalEntry')->with('success','Deleted Successfully');
+        return back()->with('success','Deleted Successfully');
+        // return redirect()->route('journalEntry')->with('success','Deleted Successfully');
     }
 
 
@@ -961,7 +963,8 @@ class JournalEntryController extends Controller
         $journal->comment=$request->comment;
         $journal->checked=false;
         $journal->save();
-        return redirect()->route('journalAuthorize')->with('success','Authorization Decline');
+        return back()->with('success','Authorization Decline');
+        // return redirect()->route('journalAuthorize')->with('success','Authorization Decline');
     }
 
 
@@ -978,7 +981,8 @@ class JournalEntryController extends Controller
         $journal->authorized=false;
         $journal->checked=false;
         $journal->save();
-        return redirect()->route('journalApproval')->with('success','Approval Declinedssss');
+        return back()->with('success','Approval Declinedssss');
+        // return redirect()->route('journalApproval')->with('success','Approval Declinedssss');
     }
 
     function convert_number($number) 
@@ -1066,7 +1070,8 @@ class JournalEntryController extends Controller
         $journal->authorized=true;
         $journal->authorized_by=Auth::id();
         $journal->save();
-        return redirect()->route('journalAuthorize')->with('success','Successfully Authorized');
+        return back()->with('success','Successfully Authorized');
+        // return redirect()->route('journalAuthorize')->with('success','Successfully Authorized');
     }
 
     public function journalMakeApprove($journal)
@@ -1111,6 +1116,7 @@ class JournalEntryController extends Controller
         $journal->authorized_by         =$journal->authorized_by;
         $journal->editedby_id         =$journal->editedby_id;
         $ApproveJournal->created_by=$journal->created_by;
+        $ApproveJournal->voucher_type=$journal->voucher_type;
         $ApproveJournal->save();
 
         foreach($journal->records as $item)
@@ -1160,7 +1166,8 @@ class JournalEntryController extends Controller
         $dr_cr_voucher->date            = $ApproveJournal->date;
         $dr_cr_voucher->save();
 
-        return redirect()->route('journalApproval')->with('success','Successfully Authorized');
+        return back()->with('success','Successfully Authorized');
+        // return redirect()->route('journalApproval')->with('success','Successfully Authorized');
     }
 
     public function Journals()
@@ -1188,4 +1195,173 @@ class JournalEntryController extends Controller
         $type="Approval";
         return view('backend.journal.journalAuthorize', compact('journals','type'));
     }
+    
+    // start work by mominul
+    public function new_journal(Request $request){
+        $mVoucherType = null;
+        $voucherType = null;
+        $journals = Journal::orderBy('id', 'desc');
+        if($request->mVoucherType){
+            $mVoucherType = $request->mVoucherType;
+        }
+        if($request->voucherType){
+            $voucherType = $request->voucherType;
+        }
+        if($request->text){
+            $journals = $journals->where('journal_no', $request->text);
+        }
+        if($request->date){
+            $journals = $journals->where('date', $request->date);
+            if($request->mVoucherType){
+                $journals = $journals->whereHas('voucher_type', function(Builder $query) use ($mVoucherType){
+                    $query->where('type', $mVoucherType);
+                });
+            }
+        }
+        if($request->voucherType){
+            $journals = $journals->whereHas('voucher_type', function(Builder $query) use ($voucherType){
+                $query->where('type', $voucherType);
+            });
+        }
+        if($request->from && $request->voucherType){
+            $journals = $journals->whereBetween('date', [$request->from, $request->to]);
+            $journals = $journals->whereHas('voucher_type', function(Builder $query) use ($voucherType){
+                $query->where('type', $voucherType);
+            });
+        }
+        if($request->from){
+            $from = $request->from;
+            if($request->to){
+                $to = $request->to;
+            }else{
+                $to = Carbon::now();
+            }
+            
+            $journals = $journals->whereBetween('date', [$from, $to]);
+        }
+        $journals = $journals->get();
+        // dd($journals);
+        $projects = ProjectDetail::all();
+        $modes = PayMode::all();
+        $terms = PayTerm::all();
+        $sub_invoice = Carbon::now()->format('Ymd');
+        $cCenters = CostCenter::all();
+        $txnTypes = TxnType::all();
+        $acHeads = AccountHead::all();
+        $pInfos = PartyInfo::all();
+        $vats = VatRate::orderBy('id','desc')->get();
+        $latest_journal_no = Journal::withTrashed()->whereDate('created_at', Carbon::today())->where('journal_no', 'LIKE', "%{$sub_invoice}%")->latest()->first();
+        // dd($latest_invoice_no);
+        if ($latest_journal_no) {
+            // $journal_no = preg_replace('/^j/', '', $latest_journal_no->journal_no);
+            $journal_no = substr($latest_journal_no->journal_no,0,-1);
+
+            // dd($journal_no);
+            $journal_code = $journal_no + 1;
+            $journal_no = $journal_code . "J";
+        } else {
+            $journal_no = Carbon::now()->format('Ymd') . '001' . "J";
+        }
+        return view('backend.journal.new-journal', compact('journals','projects', 'journal_no', 'modes', 'terms', 'cCenters', 'txnTypes', 'acHeads', 'vats', 'pInfos'));
+    }
+    public function journal_creation_section(Request $request){
+        // Gate::authorize('app.journal_entry');
+        $projects = ProjectDetail::all();
+        $modes = PayMode::all();
+        $terms = PayTerm::all();
+        $sub_invoice = Carbon::now()->format('Ymd');
+        $cCenters = CostCenter::all();
+        $txnTypes = TxnType::all();
+        $acHeads = AccountHead::all();
+        $pInfos = PartyInfo::all();
+        $vats = VatRate::orderBy('id','desc')->get();
+        // $journals=Journal::latest()->paginate(50);
+        $latest_journal_no = Journal::withTrashed()->whereDate('created_at', Carbon::today())->where('journal_no', 'LIKE', "%{$sub_invoice}%")->latest()->first();
+        // dd($latest_invoice_no);
+        if ($latest_journal_no) {
+            // $journal_no = preg_replace('/^j/', '', $latest_journal_no->journal_no);
+            $journal_no = substr($latest_journal_no->journal_no,0,-1);
+
+            // dd($journal_no);
+            $journal_code = $journal_no + 1;
+            $journal_no = $journal_code . "J";
+        } else {
+            $journal_no = Carbon::now()->format('Ymd') . '001' . "J";
+        }
+
+        $journals= JournalTemp::all();
+
+        return view('backend.journal.new-journal-entry', compact('projects', 'journal_no', 'modes', 'terms', 'cCenters', 'txnTypes', 'acHeads', 'vats', 'pInfos','journals'));
+    }
+    public function voucher_details_modal(Request $request){
+        $voucher= DebitCreditVoucher::find($request->id);
+        return view('backend.journal.new-voucher-details',compact('voucher'));
+    }
+    public function voucher_preview_modal(Request $request){
+        $journal= Journal::find($request->id);
+        return view('backend.journal.new-preview', compact('journal'));
+    }
+    public function journal_authorization_section(Request $request){
+        $journals= JournalTemp::where('authorized',0)->latest()->get();
+        return view('backend.journal.new-journal-authorize', compact('journals'));
+    }
+    public function journal_add_new_head(Request $request){
+        $acHeads = AccountHead::all();
+        $vats = VatRate::orderBy('id','desc')->get();
+        return view('backend.journal.new-journal-head', compact('acHeads', 'vats'));
+    }
+    public function journal_approval_section(Request $request){
+        Gate::authorize('app.journal_approval');
+        $journals= JournalTemp::where('authorized',1)->latest()->get();
+        return view('backend.journal.new-journal-approval', compact('journals'));
+    }
+    public function journal_authorize_show_modal(Request $request){
+        $journal= JournalTemp::find($request->id);
+        if(!$journal)
+        {
+            return back()->with('error', "Not Found");
+        }
+       return view('backend.journal.new-journa-authorize-view', compact('journal'));
+    }
+    public function journal_approval_show_modal(Request $request){
+        $journal= JournalTemp::find($request->id);
+        if(!$journal)
+        {
+            return back()->with('error', "Not Found");
+        }
+       return view('backend.journal.new-journa-approval-view', compact('journal'));
+    }
+    public function new_journal_creation(Request $records){
+        $projects = ProjectDetail::all();
+        $modes = PayMode::all();
+        $terms = PayTerm::all();
+        $sub_invoice = Carbon::now()->format('Ymd');
+        $cCenters = CostCenter::all();
+        $txnTypes = TxnType::all();
+        $acHeads = AccountHead::all();
+        $pInfos = PartyInfo::all();
+        $vats = VatRate::orderBy('id','desc')->get();
+        $latest_journal_no = Journal::withTrashed()->whereDate('created_at', Carbon::today())->where('journal_no', 'LIKE', "%{$sub_invoice}%")->latest()->first();
+        if ($latest_journal_no) {
+            $journal_no = substr($latest_journal_no->journal_no,0,-1);
+            $journal_code = $journal_no + 1;
+            $journal_no = $journal_code . "J";
+        } else {
+            $journal_no = Carbon::now()->format('Ymd') . '001' . "J";
+        }
+        return view('backend.journal.new-journal-creation', compact('projects', 'journal_no', 'modes', 'terms', 'cCenters', 'txnTypes', 'acHeads', 'vats', 'pInfos'));
+    }
+    public function journal_view_pdf($id){
+        $journal = Journal::find($id);
+        $pdf = PDF::loadView('backend.journal.new-journal-preview-pdf', compact('journal'));
+        return $pdf->download('journal-'.$journal->journal_no.'.pdf');
+        // return view('backend.journal.new-preview', compact('journal'));
+    }
+    public function tem_journal_view_pdf($id){
+        $journal = JournalTemp::find($id);
+        $pdf = PDF::loadView('backend.journal.new-journal-preview-pdf', compact('journal'));
+        return $pdf->download('journal-'.$journal->journal_no.'.pdf');
+        // return view('backend.journal.new-preview', compact('journal'));
+    }
+    // end work by mominul
 }

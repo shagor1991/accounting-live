@@ -520,5 +520,47 @@ Route::get('find/party-ledger/date', 'backend\PartyLedgerController@findPartyLed
 Route::get('find/party-ledger/{from}/{to}/{party}', 'backend\PartyLedgerController@printLedger')->name('printLedger');
 Route::get('finds/party-ledger/date/{date}/{party}', 'backend\PartyLedgerController@printLedgerDate')->name('printLedgerDate');
 
- 
+//  new work by mominul 12/10/2022
+Route::get('new-chart-of-account', 'backend\MasterAccountController@chart_of_account')->name('new-chart-of-account');
+Route::get("chart-ofaccount-pdf", "backend\MasterAccountController@chart_of_account_pdf")->name("chart-ofaccount-pdf");
+Route::get('new-journal', 'backend\JournalEntryController@new_journal')->name('new-journal');
+Route::get("journal-approval-section", "backend\JournalEntryController@journal_approval_section")->name("journal-approval-section");
+Route::post("journal-authorize-show-modal", "backend\JournalEntryController@journal_authorize_show_modal")->name("journal-authorize-show-modal");
+Route::post("journal-approval-show-modal", "backend\JournalEntryController@journal_approval_show_modal")->name("journal-approval-show-modal");
+Route::get("new-journal-creation", "backend\JournalEntryController@new_journal_creation")->name("new-journal-creation");
+Route::post('journal-creation-section', 'backend\JournalEntryController@journal_creation_section')->name('journal-creation-section');
+Route::post('voucher-details-modal', 'backend\JournalEntryController@voucher_details_modal')->name('voucher-details-modal');
+Route::post('voucher-preview-modal', 'backend\JournalEntryController@voucher_preview_modal')->name('voucher-preview-modal');
+Route::get('journal-authorization-section', 'backend\JournalEntryController@journal_authorization_section')->name('journal-authorization-section');
+Route::post('journal-add-new-head', 'backend\JournalEntryController@journal_add_new_head')->name('journal-add-new-head');
+Route::get('new-expense', 'backend\ExpenseController@new_expense')->name("new-expense");
+Route::post("party-center-preview", "backend\PartyInfoController@party_center_preview")->name("party-center-preview");
+// acconts report
+Route::get('new-general-ledger', 'backend\AccountsReportController@new_general_ledger')->name('new-general-ledger');
+Route::get('new-general-ledger/date-range', 'backend\AccountsReportController@new_general_ledger_by_date_range')->name('new-general-ledger-by-date-range');
+Route::get('new-general-ledger/date', 'backend\AccountsReportController@new_general_ledger_by_date')->name('new-general-ledger-by-date');
+Route::get('new-trial-balance', 'backend\AccountsReportController@new_trial_balance')->name('new-trial-balance');
+Route::get('new-trial-balance/date', 'backend\AccountsReportController@new_trial_balance_date')->name('new-trial-balance-date');
+Route::get('new-trial-balance/date-range', 'backend\AccountsReportController@new_trial_balance_date_range')->name('new-trial-balance-date-range');
+Route::get('new-accounts-payable-ledger', 'backend\AccountsReportController@new_accounts_payable_ledger')->name('new-accounts-payable-ledger');
+Route::get('new-accounts-receivable-ledger', 'backend\AccountsReportController@new_accounts_receivable_ledger')->name('new-accounts-receivable-ledger');
+Route::get('new-party-ledger', 'backend\PartyLedgerController@new_party_ledger')->name('new-party-ledger');
+// 15/10/2022
+Route::get("new-mapping", "backend\MappingController@new_mapping")->name("new-mapping");
+Route::post("new-find-account-head", "backend\MappingController@new_find_account_head")->name("new-find-account-head");
+Route::post("new-account-code", "backend\MappingController@new_account_code")->name("new-account-code");
+Route::post("mapping-edit-modal", "backend\MappingController@mapping_edit_modal")->name("mapping-edit-modal");
+Route::get("new-project-details", "backend\ProjectController@new_project_details")->name("new-project-details");
+Route::post("business-edit-modal", "backend\ProjectController@business_edit_modal")->name("business-edit-modal");
+Route::post("business-view-modal", "backend\ProjectController@business_view_modal")->name("business-view-modal");
+Route::get("new-bank-details", "backend\BankController@new_bank_details")->name("new-bank-details");
+Route::post("bank-details-edit-modal", "backend\BankController@bank_details_edit_modal")->name("bank-details-edit-modal");
+Route::get('get-party-info/{id}', 'backend\PartyInfoController@get_party_info')->name('get-party-info');
+Route::get('journal-view-pdf/{id}', 'backend\JournalEntryController@journal_view_pdf')->name('journal-view-pdf');
+Route::get('tem-journal-view-pdf/{id}', 'backend\JournalEntryController@tem_journal_view_pdf')->name('tem-journal-view-pdf');
+Route::get('new-receipt-voucher','backend\NewReceiptVoucher@new_receipt_voucher')->name('new-receipt-voucher');
+Route::get("receipt-voucher-list", "backend\NewReceiptVoucher@receipt_voucher_list")->name("receipt-voucher-list");
+Route::post("receipt-voucher-details-modal", "backend\NewReceiptVoucher@receipt_voucher_details_modal")->name("receipt-voucher-details-modal");
+Route::get("receipt-voucher-view-pdf/{id}", "backend\NewReceiptVoucher@receipt_voucher_view_pdf")->name("receipt-voucher-view-pdf");
+
 });

@@ -1,4 +1,4 @@
-<div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
+<div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow print-hidden" data-scroll-to-active="true">
     <div class="navbar-header">
         <ul class="nav navbar-nav flex-row">
             <li class="nav-item mr-auto"><a class="navbar-brand" href="{{ asset('assets/backend')}}/html/ltr/vertical-menu-boxicons-template/index.html">
@@ -56,51 +56,26 @@
 
 
             @if (Auth::user()->hasPermissionAny(['app.master_account.index','app.account_head.index']))
-            <li class="nav-item"><a href="#"><i class="bx bx-user-plus"></i><span class="menu-title text-truncate" data-i18n="Chart of Accounts">Chart of Accounts</span></a>
-                <ul class="menu-content">
-                    @if (Auth::user()->hasPermission('app.master_account.index'))
-                    <li class="{{ Request::is('master-accounts-details*') || Request::is('master-details/*') ? 'active' : ''}}">
-                        <a class="d-flex align-items-center" href="{{ route('masteAccDetails') }}">
-                            <i class="bx bx-right-arrow-alt"></i>
-                            <span class="menu-item text-truncate" data-i18n="Master Account">Master Account</span>
-                        </a>
-                    </li>
-                    @endif
-                    @if (Auth::user()->hasPermission('app.account_head.index'))
-                    <li class="{{ Request::is('accounts-head-details') || Request::is('accounts-head-details/*') || Request::is('accounts-head-details/*') ? 'active' : ''}}">
-                        <a class="d-flex align-items-center" href="{{ route('accHeadDetails') }}">
-                            <i class="bx bx-right-arrow-alt"></i>
-                            <span class="menu-item text-truncate" data-i18n="Account Head">Account Head</span>
-                        </a>
-                    </li>
-                    @endif
-
-                </ul>
+            <li class="{{ Request::is('new-chart-of-account') || Request::is('master-details/*') ? 'active' : ''}}">
+                <a class="d-flex align-items-center" href="{{ route('new-chart-of-account') }}">
+                    <i class="bx bx-right-arrow-alt"></i>
+                    <span class="menu-item text-truncate" data-i18n="Master Account">Chart of Account</span>
+                </a>
             </li>
             @endif
-
             @if (Auth::user()->hasPermission('app.cost_center.index'))
             <li class="nav-item {{ Request::is('cost-center-details') || Request::is('cost-center/edit/*') || Request::is('cost-center-details/*') ? 'active' : ''}}">
                 <a href="{{ route('costCenterDetails') }}">
-                    <i class="bx bx-check-shield"></i>
+                    <i class="bx bx-right-arrow-alt"></i>
                     <span class="menu-title text-truncate" data-i18n="Cost Center">Cost Center</span>
                 </a>
             </li>
             @endif
-
-            {{-- @if (Auth::user()->hasPermission('app.cost_center.index')) --}}
-            <li class="nav-item {{ Request::is('expense/create') || Request::is('expense/edit/*') || Request::is('expense/create') ? 'active' : ''}}">
-                <a href="{{ route('expense.create') }}">
-                    <i class="bx bx-check-shield"></i>
-                    <span class="menu-title text-truncate" data-i18n="Cost Center">Expense</span>
-                </a>
-            </li>
-            {{-- @endif --}}
-
+            
             @if (Auth::user()->hasPermission('app.profit_center.index'))
-            <li class="nav-item {{ Request::is('profit-details') || Request::is('student/*') || Request::is('profit-center/edit/*') ? 'active' : ''}}">
+            <li class="nav-item {{ Request::is('profit-details') ||  Request::is('profit-center/edit/*') ? 'active' : ''}}">
                 <a href="{{ route('profitCenterDetails') }}">
-                    <i class="bx bx-check-shield"></i>
+                    <i class="bx bx-right-arrow-alt"></i>
                     <span class="menu-title text-truncate" data-i18n="Profit Center">Profit Center</span>
                 </a>
             </li>
@@ -108,56 +83,35 @@
             @if (Auth::user()->hasPermission('app.party_info.index'))
             <li class="nav-item {{ Request::is('party-info') || Request::is('party-info/*')  ? 'active' : ''}}">
                 <a href="{{ route('partyInfoDetails') }}">
-                    <i class="bx bx-check-shield"></i>
+                    <i class="bx bx-right-arrow-alt"></i>
                     <span class="menu-title text-truncate" data-i18n="Party Info">Party Info</span>
                 </a>
             </li>
             @endif
-
+            
             @if (Auth::user()->hasPermission('app.document'))
             <li class="nav-item {{ Request::is('document') || Request::is('document/*')  ? 'active' : ''}}">
                 <a href="{{ route('document.index') }}">
-                    <i class="bx bx-check-shield"></i>
+                    <i class="bx bx-right-arrow-alt"></i>
                     <span class="menu-title text-truncate" data-i18n="Document">Document</span>
                 </a>
             </li>
             @endif
-
-            
-            <li class=" nav-item"><a href="#"><i class="bx bx-user-plus"></i><span class="menu-title text-truncate" data-i18n="Journal">Vouchers</span></a>
-                <ul class="menu-content">
-                    {{-- @if(auth()->user()->hasPermission('app.journal_entry')) --}}
-                    <li  class="{{ Request::is('debit-voucher*') ? 'active' : ''}}">
-                        <a class="d-flex align-items-center" href="{{ route('debit-voucher') }}">
-                            <i class="bx bx-right-arrow-alt"></i>
-                            <span class="menu-item text-truncate" data-i18n="Entry">Debit Voucher</span>
-                        </a>
-                    </li>
-                    {{-- @endif --}}
-                    {{-- @if(auth()->user()->hasPermission('app.journal_authorize')) --}}
-                    <li class="{{ Request::is('credit-voucher*') ? 'active' : ''}}">
-                        <a class="d-flex align-items-center" href="{{ route('credit-voucher') }}">
-                            <i class="bx bx-right-arrow-alt"></i>
-                            <span class="menu-item text-truncate" data-i18n="Authorization">Credit Voucher</span>
-                        </a>
-                    </li>
-                    {{-- @endif --}}
-
-                    {{-- @if(auth()->user()->hasPermission('app.journal_authorize')) --}}
-                    <li class="{{ Request::is('journal-voucher*') ? 'active' : ''}}">
-                        <a class="d-flex align-items-center" href="{{ route('journal-voucher') }}">
-                            <i class="bx bx-right-arrow-alt"></i>
-                            <span class="menu-item text-truncate" data-i18n="Authorization">Journal Voucher</span>
-                        </a>
-                    </li>
-                    {{-- @endif --}}
-
-                </ul>
+            <li class="nav-item {{ Request::is('new-journal')  ? 'active' : ''}}">
+                <a href="{{ route('new-journal') }}">
+                    <i class="bx bx-right-arrow-alt"></i>
+                    <span class="menu-title text-truncate" data-i18n="Document">Journal</span>
+                </a>
             </li>
-
-            <li class="nav-item {{ Request::is('document') || Request::is('document/*')  ? 'active' : ''}}">
-                <a href="{{ route('form-receipt-voucher') }}">
-                    <i class="bx bx-check-shield"></i>
+            <li class="nav-item {{ Request::is('new-general-ledger')  ? 'active' : ''}}">
+                <a href="{{ route('new-general-ledger') }}">
+                    <i class="bx bx-right-arrow-alt"></i>
+                    <span class="menu-title text-truncate" data-i18n="Document">Accounts Report</span>
+                </a>
+            </li>
+            <li class="nav-item {{ Request::is('new-receipt-voucher') || Request::is('receipt-voucher-list') ? 'active' : ''}}">
+                <a href="{{ route('receipt-voucher-list') }}">
+                    <i class="bx bx-right-arrow-alt"></i>
                     <span class="menu-title text-truncate" data-i18n="Document">Receipt Voucher</span>
                 </a>
             </li>

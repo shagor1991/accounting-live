@@ -11,6 +11,7 @@ use App\Models\MstDefinition;
 use App\MstCatType;
 use App\VatType;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\PDF;
 
 class MasterAccountController extends Controller
 {
@@ -93,12 +94,11 @@ class MasterAccountController extends Controller
         $mstAccType = MstACType::get();
         $mst_definitions = MstDefinition::get();
         $masterDetails = MasterAccount::where('mst_ac_type', '!=', 'Draft')->latest()->paginate(25);
-        return view('backend.masterAccount.masteAccDetails', compact('masterDetails','categories', 'masterAcc', 'mst_definitions', 'mstAccType', 'vat_types'));
+        $master_details = MasterAccount::latest()->get();
+        return view('backend.masterAccount.chart-of-account', compact('vat_types', 'mstAccType', 'categories', 'mst_definitions', 'masterDetails', 'master_details', 'masterAcc'));
+        // return view('backend.masterAccount.masteAccDetails', compact('masterDetails','categories', 'masterAcc', 'mst_definitions', 'mstAccType', 'vat_types'));
     }
-
-
     public function masterDetailsUpdate($masterAcc, Request $request)
-
     {
         $request->validate(
             [
@@ -146,7 +146,7 @@ class MasterAccountController extends Controller
         }
 
         $masterAcc->forceDelete();
-        return redirect()->route('masteAccDetails')->with('success', "Deleted Successfully");
+        return back()->with('success', "Deleted Successfully");
     }
 
 
@@ -318,6 +318,22 @@ class MasterAccountController extends Controller
             }
             $head->forceDelete();
             return back()->with('success','Deleted Successfully');
+        }
+        // work by mominul
+        public function chart_of_account(){
+            $vat_types = VatType::get();
+            $mstAccType = MstACType::get();
+            $categories=MstCatType::get();
+            $mst_definitions = MstDefinition::get();
+            $masterDetails = MasterAccount::where('mst_ac_type', '!=', 'Draft')->latest()->paginate(25);
+            $masterDetailsPDF = MasterAccount::where('mst_ac_code', '!=', 'Draft')->latest()->get();
+            $master_details = MasterAccount::latest()->get();
+            return view('backend.masterAccount.chart-of-account', compact('vat_types', 'mstAccType', 'categories', 'mst_definitions', 'masterDetails', 'master_details', 'masterDetailsPDF'));
+        }
+        public function chart_of_account_pdf(){
+            $masterDetails = MasterAccount::where('mst_ac_code', '!=', 'Draft')->latest()->get();
+            $pdf = PDF::loadView('backend.masterAccount.chart-of-account-pdf', compact('masterDetails'));
+            return $pdf->download('chart-of-account-list.pdf');
         }
 
 }

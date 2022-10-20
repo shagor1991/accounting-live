@@ -11,7 +11,8 @@ class ProfitCenterController extends Controller
     public function profitCenterDetails()
     {
         $profitDetails = ProfitCenter::where('activity', '!=', 'Draft')->latest()->paginate(25);
-        return view('backend.profitCenter.profitCenterDetails', compact('profitDetails'));
+        $profitDetailsPrint = ProfitCenter::where('activity', '!=', 'Draft')->latest()->get();
+        return view('backend.profitCenter.profitCenterDetails', compact('profitDetails', 'profitDetailsPrint'));
     }
 
     public function profitCenterPost(Request $request)

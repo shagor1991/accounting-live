@@ -6,7 +6,7 @@ use App\CostCenterType;
 use App\Http\Controllers\Controller;
 use App\PartyInfo;
 use Illuminate\Http\Request;
-
+use Barryvdh\DomPDF\Facade\PDF;
 class PartyInfoController extends Controller
 {
     public function partyInfoDetails()
@@ -37,7 +37,8 @@ class PartyInfoController extends Controller
         }
         $costTypes=CostCenterType::get();
         $partyInfos = PartyInfo::where('pi_type','!=', "Draft")->orderBy('id','DESC')->paginate(25);
-        return view('backend.partyInfo.partyCenterDetails', compact('partyInfos','costTypes','cc'));
+        $partyInfosPDF = PartyInfo::where('pi_type','!=', "Draft")->orderBy('id','DESC')->get();
+        return view('backend.partyInfo.partyCenterDetails', compact('partyInfos','costTypes','cc', 'partyInfosPDF'));
     }
 
     public function partyInfoPost(Request $request)
@@ -203,6 +204,21 @@ class PartyInfoController extends Controller
         }
         return view('backend.partyInfo.partyCenterView', compact('pInfo'));
 
+    }
+    // work by mominul
+    public function party_center_preview(Request $request){
+        $pInfo=PartyInfo::find($request->id);
+        if(!$pInfo)
+        {
+            return back()->with('error', "Not Found");
+        }
+        return view('backend.partyInfo.party-center-view', compact('pInfo'));
+    }
+    public function get_party_info(Request $request, $id){
+        $pInfo=PartyInfo::find($id);
+        // return view('backend.partyInfo.party-center-view-pdf', compact('pInfo'));
+        $pdf = PDF::loadView('backend.partyInfo.party-center-view-pdf', compact('pInfo'));
+        return $pdf->download('profile-'.$pInfo->pi_name.'.pdf');
     }
 
 }

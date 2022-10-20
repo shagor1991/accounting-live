@@ -93,4 +93,9 @@ class JournalTemp extends Model
     {
         return $this->belongsTo(VatRate::class, 'tax_rate');
     }
+
+    // work by mominul
+    public function voucher_type(){
+        return $this->hasOne(DebitCreditVoucher::class,'journal_id');
+    }
 }
